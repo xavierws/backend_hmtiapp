@@ -50,9 +50,7 @@ class FeedController extends Controller
 
     public function get()
     {
-        $allFeed = Feed::orderBy('created_at', 'desc')->get();
-
-        return response()->json($allFeed);
+        return FeedResource::collection(Feed::orderBy('created_at', 'desc')->get());
     }
 
     public function delete()
