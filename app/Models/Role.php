@@ -17,12 +17,22 @@ class Role extends Model
     protected $table = 'roles';
 
     /**
-     * Get the users belong to this role.
+     * Get the collegers belong to this role.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function users()
+    public function collegers()
     {
         return $this->hasMany('App\Models\CollegerProfile');
+    }
+
+    /**
+     * Get the administrators belong to this role
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function administrators()
+    {
+        return $this->hasMany('App\Models\AdministratorProfile');
     }
 }

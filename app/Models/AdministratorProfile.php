@@ -29,21 +29,21 @@ class AdministratorProfile extends Model
     /**
      * Get the role associated with this profile
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function role()
     {
-        return $this->hasOne('App\Models\Role');
+        return $this->belongsTo('App\Models\Role');
     }
 
     /**
      * Get all of the users associated with this profile
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     * @return \Illuminate\Database\Eloquent\Relations\MorphOne
      */
     public function users()
     {
-        return $this->morphMany('App\Models\User', 'userable');
+        return $this->morphOne('App\Models\User', 'userable');
     }
 
     /**

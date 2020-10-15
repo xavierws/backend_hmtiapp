@@ -24,6 +24,11 @@ class Feed extends JsonResource
         ];
     }
 
+    /**
+     * transform the image into base64 byte string
+     *
+     * @return array
+     */
     protected function transformImage()
     {
         $feed = $this->find($this->id);

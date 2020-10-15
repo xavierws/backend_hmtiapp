@@ -16,12 +16,38 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
+//login and issue token
 Route::post('login', [AuthController::class, 'login']);
 
-Route::post('post-feed', [FeedController::class, 'create']);
+//Send key to the user's email
 
-Route::get('get-feed', [FeedController::class, 'get']);
+
+//reset password
+
+
+
+//Route group for middleware
+//Require login
+Route::middleware('auth:sanctum')->group(function () {
+
+    //post the feed
+    Route::post('feed/post', [FeedController::class, 'create']);
+
+    //show all the feed
+    Route::get('feed/index', [FeedController::class, 'index']);
+
+    //delete specific feed
+    Route::post('feed/delete', [FeedController::class, 'destroy']);
+
+    //logout and revoke token
+    Route::post('logout', function (Request $request) {
+        $request->validate([
+            'email' => 'required|email',
+        ]);
+        $user = \App\Models\User::where('email', $request->email)->first();
+        $user->tokens()->delete();
+        return response()->json([
+            'message' => 'you are already logout'
+        ]);
+    });
+});

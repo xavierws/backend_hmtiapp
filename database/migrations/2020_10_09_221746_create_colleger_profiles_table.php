@@ -17,7 +17,7 @@ class CreateCollegerProfilesTable extends Migration
             $table->id();
             $table->string('name');
             $table->bigInteger('nrp')->unique();
-            $table->string('birthday');
+            $table->date('birthday');
             $table->string('address');
             $table->unsignedInteger('role_id');
             $table->timestamps();

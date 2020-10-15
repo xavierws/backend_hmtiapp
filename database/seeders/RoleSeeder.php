@@ -25,7 +25,7 @@ class RoleSeeder extends Seeder
      */
     protected function _get_roles_data(){
         return [
-            ['id' => 1, 'name' => 'user', 'created_at' => now()],
+            ['id' => 1, 'name' => 'colleger', 'created_at' => now()],
             ['id' => 2, 'name' => 'admin', 'created_at' => now()]
         ];
     }
