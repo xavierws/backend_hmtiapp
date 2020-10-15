@@ -6,7 +6,6 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
@@ -27,7 +26,8 @@ class AuthController extends Controller
         ]);
 
         $user = User::where('email', $request->email)->first();
-        $role = User::find($user->id)->role->name;
+        $userable = User::find($user->id)->userable;
+        $role = $userable->role->name;
 
         if (! $user || ! Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([
@@ -35,8 +35,14 @@ class AuthController extends Controller
             ]);
         }
 
+        $token = $user->createToken($request->device_name)->plainTextToken;
+
+        if ($role === 'admin'){
+            $token = $user->createToken($request->device_name, ['user:admin'])->plainTextToken;
+        }
+
         return response()->json([
-            'token' => $user->createToken($request->device_name)->plainTextToken,
+            'token' => $token,
             'role' => $role
         ]);
     }

@@ -5,19 +5,37 @@ namespace App\Http\Controllers;
 use App\Models\Feed;
 use App\Models\Image;
 use App\Http\Resources\Feed as FeedResource;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 
 class FeedController extends Controller
 {
+    /**
+     * Create a feed
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws ValidationException
+     */
     public function create(Request $request)
     {
         $request->validate([
+            'email' => 'required|email',
             'image_strings' => 'required',
             'title' => 'required|max:255',
             'caption' => 'required|max:3000',
             'day_of_week' => 'required'
         ]);
+
+        $user = User::where('email', $request->email)->first();
+        if (! $user->tokenCan('user:admin')) {
+            throw ValidationException::withMessages([
+                'user_level' => 'you do not have permission to post feed'
+            ]);
+        }
+
         $image_strings = $request->image_strings;
 
         Feed::create([
@@ -48,12 +66,45 @@ class FeedController extends Controller
 
     }
 
-    public function get()
+    /**
+     * show all the feed
+     *
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     */
+    public function index()
     {
         return FeedResource::collection(Feed::orderBy('created_at', 'desc')->get());
     }
 
-    public function delete()
+    /**
+     * Delete the corresponding feed
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws ValidationException
+     */
+    public function destroy(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'feed_id' => 'required|number'
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+        if (! $user->tokenCan('user:admin')) {
+            throw ValidationException::withMessages([
+                'user_level' => 'you do not have permission to post feed'
+            ]);
+        }
+
+        Feed::find($request->feed_id)->delete();
+
+        return response()->json([
+           'message' => 'the feed has been deleted'
+        ]);
+    }
+
+    public function update()
     {
 
     }
