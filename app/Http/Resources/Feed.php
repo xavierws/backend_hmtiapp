@@ -68,6 +68,11 @@ class Feed extends JsonResource
         return $arrayOfName;
     }
 
+    /**
+     * get the number of viewer
+     *
+     * @return mixed
+     */
     protected function countViewer()
     {
          return $this->find($this->id)->collegerProfiles->count();

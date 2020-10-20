@@ -14,7 +14,7 @@ class AdministratorProfile extends Model
      *
      * @var string
      */
-    protected $table = 'administrator_profile';
+    protected $table = 'administrator_profiles';
 
     /**
      * The attributes that are mass assignable.

@@ -96,20 +96,36 @@ class FeedController extends Controller
             ]);
         }
 
-        Feed::find($request->feed_id)->delete();
+        $feed = Feed::find($request->feed_id);
+        Storage::delete($feed->images->filename);
+        Image::destroy($feed->images->id);
+        $feed->delete();
 
         return response()->json([
            'message' => 'the feed has been deleted'
         ]);
     }
 
-    public function edit()
+    public function edit(Request $request)
     {
+        $request->validate([
+            'feed_id' => 'required'
+        ]);
 
+        return new FeedResource(Feed::find($request->id));
     }
 
-    public function update()
+    public function update(Request $request)
     {
+        $request->validate([
+            'feed_id' => 'required',
+            'email' => 'required|email',
+            'image_strings' => 'required',
+            'title' => 'required|max:255',
+            'caption' => 'required|max:3000',
+            'day_of_week' => 'required'
+        ]);
 
+        
     }
 }

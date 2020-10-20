@@ -30,6 +30,10 @@ Route::post('login', [AuthController::class, 'login']);
 //Require login
 Route::middleware('auth:sanctum')->group(function () {
 
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+
     //post the feed
     Route::post('feed/post', [FeedController::class, 'create']);
 
@@ -41,10 +45,12 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //logout and revoke token
     Route::post('logout', function (Request $request) {
-        $request->validate([
-            'email' => 'required|email',
-        ]);
-        $user = \App\Models\User::where('email', $request->email)->first();
+//        $request->validate([
+//            'email' => 'required|email',
+//        ]);
+//        $user = \App\Models\User::where('email', $request->email)->first();
+        $user = \App\Models\User::where('email', $request->user()->email)->first();
+
         $user->tokens()->delete();
         return response()->json([
             'message' => 'you are already logout'
