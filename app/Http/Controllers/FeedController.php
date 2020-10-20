@@ -22,14 +22,13 @@ class FeedController extends Controller
     public function create(Request $request)
     {
         $request->validate([
-            'email' => 'required|email',
             'image_strings' => 'required',
             'title' => 'required|max:255',
             'caption' => 'required|max:3000',
             'day_of_week' => 'required'
         ]);
 
-        $user = User::where('email', $request->email)->first();
+        $user = User::where('email', $request->user()->email)->first();
         if (! $user->tokenCan('user:admin')) {
             throw ValidationException::withMessages([
                 'user_level' => 'you do not have permission to post feed'
@@ -85,11 +84,10 @@ class FeedController extends Controller
     public function destroy(Request $request)
     {
         $request->validate([
-            'email' => 'required|email',
             'feed_id' => 'required|number'
         ]);
 
-        $user = User::where('email', $request->email)->first();
+        $user = User::where('email', $request->user()->email)->first();
         if (! $user->tokenCan('user:admin')) {
             throw ValidationException::withMessages([
                 'user_level' => 'you do not have permission to delete feed'
@@ -119,13 +117,37 @@ class FeedController extends Controller
     {
         $request->validate([
             'feed_id' => 'required',
-            'email' => 'required|email',
             'image_strings' => 'required',
             'title' => 'required|max:255',
-            'caption' => 'required|max:3000',
-            'day_of_week' => 'required'
+            'caption' => 'required|max:3000'
         ]);
 
-        
+        $user = User::where('email', $request->user()->email)->first();
+        if (! $user->tokenCan('user:admin')) {
+            throw ValidationException::withMessages([
+                'user_level' => 'you do not have permission to delete feed'
+            ]);
+        }
+
+        $feed = Feed::find($request->feed_id);
+        $feed->title = $request->title;
+        $feed->caption = $request->caption;
+        $feed->save();
+
+        $n = 0;
+        foreach ($request->image_strings as $image_string) {
+            $image = base64_decode($image_string);
+
+            $n++;
+            $imageName = 'public/feed/' . $request->title . (string)$n . '.png';
+            Storage::put($imageName, $image);
+
+            $feed->image->filename = $imageName;
+            $feed->image->filename->save();
+        }
+
+        return response()->json([
+            'message' => 'feed has been updated'
+        ]);
     }
 }

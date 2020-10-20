@@ -43,6 +43,12 @@ Route::middleware('auth:sanctum')->group(function () {
     //delete specific feed
     Route::post('feed/delete', [FeedController::class, 'destroy']);
 
+    //send a specific feed
+    Route::get('feed/edit', [FeedController::class, 'edit']);
+
+    //Update the feed data and image
+    Route::put('feed/update', [FeedController::class, 'update']);
+
     //logout and revoke token
     Route::post('logout', function (Request $request) {
 //        $request->validate([

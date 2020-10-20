@@ -21,7 +21,7 @@ class Feed extends JsonResource
             'day_of_week' => $this->day_of_week,
             'image' => $this->transformImage(),
             'number_of_viewer' => $this->countViewer(),
-            'viewer' => $this->getViewer(),
+//            'viewer' => $this->getViewer(),
             'created_at' => $this->created_at
         ];
     }
