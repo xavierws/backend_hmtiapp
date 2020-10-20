@@ -17,7 +17,7 @@ class CollegerProfile extends Model
     protected $table = 'colleger_profiles';
 
     /**
-     * he attributes that are mass assignable.
+     * the attributes that are mass assignable.
      *
      * @var string[]
      */

@@ -10,7 +10,7 @@ class Feed extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return array
      */
     public function toArray($request)
@@ -20,6 +20,8 @@ class Feed extends JsonResource
             'caption' => $this->caption,
             'day_of_week' => $this->day_of_week,
             'image' => $this->transformImage(),
+            'number_of_viewer' => $this->countViewer(),
+            'viewer' => $this->getViewer(),
             'created_at' => $this->created_at
         ];
     }
@@ -35,9 +37,9 @@ class Feed extends JsonResource
 
         $n = 0;
         $arrayOfImg = array();
-        foreach ($feed->images as $image){
+        foreach ($feed->images as $image) {
             $filename = $image->filename;
-            $imgFile =  Storage::get($filename);
+            $imgFile = Storage::get($filename);
 
             $encodedImg = base64_encode($imgFile);
 
@@ -46,5 +48,28 @@ class Feed extends JsonResource
         }
 
         return $arrayOfImg;
+    }
+
+    /**
+     * get all the feed's viewer name
+     *
+     * @return array
+     */
+    protected function getViewer()
+    {
+        $feed = $this->find($this->id);
+
+        $n = 0;
+        $arrayOfName = array();
+        foreach ($feed->collegerProfiles as $collegerProfile) {
+            $arrayOfName[$n] = $collegerProfile->name;
+        }
+
+        return $arrayOfName;
+    }
+
+    protected function countViewer()
+    {
+         return $this->find($this->id)->collegerProfiles->count();
     }
 }

@@ -63,7 +63,6 @@ class FeedController extends Controller
         return response()->json([
             'message' => 'post feed is successful'
         ]);
-
     }
 
     /**
@@ -93,7 +92,7 @@ class FeedController extends Controller
         $user = User::where('email', $request->email)->first();
         if (! $user->tokenCan('user:admin')) {
             throw ValidationException::withMessages([
-                'user_level' => 'you do not have permission to post feed'
+                'user_level' => 'you do not have permission to delete feed'
             ]);
         }
 
@@ -102,6 +101,11 @@ class FeedController extends Controller
         return response()->json([
            'message' => 'the feed has been deleted'
         ]);
+    }
+
+    public function edit()
+    {
+
     }
 
     public function update()

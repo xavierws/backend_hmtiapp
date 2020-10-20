@@ -28,7 +28,7 @@ class Feed extends Model
     ];
 
     /**
-     *
+     * Get the colleger's profile image
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
@@ -38,11 +38,11 @@ class Feed extends Model
     }
 
     /**
-     * The colleger that has seen the feeds
+     * get the colleger that has seen the feeds
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function CollegerProfiles()
+    public function collegerProfiles()
     {
         return $this->belongsToMany('App\Models\CollegerProfile', 'seen_by')->withTimestamps();
     }
