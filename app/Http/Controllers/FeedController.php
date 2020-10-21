@@ -28,8 +28,7 @@ class FeedController extends Controller
             'day_of_week' => 'required'
         ]);
 
-        $user = User::where('email', $request->user()->email)->first();
-        if (! $user->tokenCan('user:admin')) {
+        if (! $request->user()->tokenCan('user:admin')) {
             throw ValidationException::withMessages([
                 'user_level' => 'you do not have permission to post feed'
             ]);
@@ -84,19 +83,28 @@ class FeedController extends Controller
     public function destroy(Request $request)
     {
         $request->validate([
-            'feed_id' => 'required|number'
+            'feed_id' => 'required|integer'
         ]);
 
-        $user = User::where('email', $request->user()->email)->first();
-        if (! $user->tokenCan('user:admin')) {
+        if (! $request->user()->tokenCan('user:admin')) {
             throw ValidationException::withMessages([
                 'user_level' => 'you do not have permission to delete feed'
             ]);
         }
 
         $feed = Feed::find($request->feed_id);
-        Storage::delete($feed->images->filename);
-        Image::destroy($feed->images->id);
+
+        $n = 0;
+        $filename = array();
+        $id = array();
+        foreach ($feed->images as $image) {
+            $filename[$n] = $image->filename;
+            $id[$n] = $image->id;
+            $n++;
+        }
+
+        Storage::delete($filename);
+        Image::destroy($id);
         $feed->delete();
 
         return response()->json([
@@ -104,6 +112,12 @@ class FeedController extends Controller
         ]);
     }
 
+    /**
+     * show the requested feed
+     *
+     * @param Request $request
+     * @return FeedResource
+     */
     public function edit(Request $request)
     {
         $request->validate([
@@ -113,6 +127,13 @@ class FeedController extends Controller
         return new FeedResource(Feed::find($request->id));
     }
 
+    /**
+     * Update the requested feed
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws ValidationException
+     */
     public function update(Request $request)
     {
         $request->validate([
@@ -122,8 +143,7 @@ class FeedController extends Controller
             'caption' => 'required|max:3000'
         ]);
 
-        $user = User::where('email', $request->user()->email)->first();
-        if (! $user->tokenCan('user:admin')) {
+        if (! $request->user()->tokenCan('user:admin')) {
             throw ValidationException::withMessages([
                 'user_level' => 'you do not have permission to delete feed'
             ]);

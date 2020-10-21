@@ -30,6 +30,7 @@ Route::post('login', [AuthController::class, 'login']);
 //Require login
 Route::middleware('auth:sanctum')->group(function () {
 
+    //get the user's credentials
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
@@ -41,7 +42,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('feed/index', [FeedController::class, 'index']);
 
     //delete specific feed
-    Route::post('feed/delete', [FeedController::class, 'destroy']);
+    Route::delete('feed/delete', [FeedController::class, 'destroy']);
 
     //send a specific feed
     Route::get('feed/edit', [FeedController::class, 'edit']);

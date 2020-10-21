@@ -35,10 +35,10 @@ class AuthController extends Controller
             ]);
         }
 
-        $token = $user->createToken($request->device_name)->plainTextToken;
-
         if ($role === 'admin'){
             $token = $user->createToken($request->device_name, ['user:admin'])->plainTextToken;
+        } else {
+            $token = $user->createToken($request->device_name)->plainTextToken;
         }
 
         return response()->json([
