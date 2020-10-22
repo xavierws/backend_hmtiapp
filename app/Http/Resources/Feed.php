@@ -22,7 +22,8 @@ class Feed extends JsonResource
             'image' => $this->transformImage(),
             'number_of_viewer' => $this->countViewer(),
 //            'viewer' => $this->getViewer(),
-            'created_at' => $this->created_at
+            'created_at' => $this->created_at,
+            'title'=>$this->title
         ];
     }
 
