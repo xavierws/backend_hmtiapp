@@ -58,12 +58,13 @@ class AuthController extends Controller
     public function changePassword(Request $request)
     {
         $request->validate([
-            'email' => 'required|email',
+//            'email' => 'required|email',
             'password' => 'required',
             'new_password' => 'required'
         ]);
 
-        $user = User::where('email', $request->email)->first();
+        $user = $request->user();
+//        $user = User::where('email', $request->email)->first();
 
         if (! Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([

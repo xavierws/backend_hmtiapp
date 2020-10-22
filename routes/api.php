@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FeedController;
+use App\Http\Controllers\ParticipantController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -32,7 +33,12 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //get the user's credentials
     Route::get('/user', function (Request $request) {
-        return $request->user();
+        $user = $request->user();
+        $role = $user->userable->role_id == 1? 'colleger':'admin';
+        return response()->json([
+            'user' => $user,
+            'role' => $role
+        ]);
     });
 
     //post the feed
@@ -49,6 +55,12 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //Update the feed data and image
     Route::put('feed/update', [FeedController::class, 'update']);
+
+    //return the participant's profile
+    Route::get('user/profile', [ParticipantController::class, 'index']);
+
+    //update colleger data
+    Route::put('user/update', [ParticipantController::class, 'update']);
 
     //logout and revoke token
     Route::post('logout', function (Request $request) {

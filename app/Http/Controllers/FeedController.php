@@ -170,4 +170,24 @@ class FeedController extends Controller
             'message' => 'feed has been updated'
         ]);
     }
+
+    public function inputViewer()
+    {
+
+    }
+
+
+    public function viewer()
+    {
+
+        $feed = Feed::find();
+
+        $n = 0;
+        $arrayOfName = array();
+        foreach ($feed->collegerProfiles as $collegerProfile) {
+            $arrayOfName[$n] = $collegerProfile->name;
+        }
+
+        return $arrayOfName;
+    }
 }
