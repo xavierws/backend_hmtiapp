@@ -48,7 +48,7 @@ class FeedController extends Controller
             $image = base64_decode($image_string);
 
             $n++;
-            $imageName = 'public/feed/' . (string)$feedId . (string)$n . '.png';
+            $imageName = 'storage/feed/' . (string)$feedId . (string)$n . '.png';
             Storage::put($imageName, $image);
 
             Image::create([
