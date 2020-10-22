@@ -41,14 +41,14 @@ class FeedController extends Controller
             'caption' => $request->caption,
             'day_of_week' => $request->day_of_week
         ]);
-        $feedId = Feed::orderBy('id', 'desc')->first()->value('id');
+        $feedId = Feed::orderBy('id', 'desc')->limit(1)->value('id');
 
         $n = 0;
       //  foreach ($image_strings as $image_string) {
             $image = base64_decode($image_string);
 
             $n++;
-            $imageName = 'public/feed/' . $request->title . (string)$n . '.png';
+            $imageName = 'public/feed/' . $request->title . (string)$feedId . (string)$n . '.png';
             Storage::put($imageName, $image);
 
             Image::create([
@@ -124,7 +124,7 @@ class FeedController extends Controller
             'feed_id' => 'required'
         ]);
 
-        return new FeedResource(Feed::find($request->id));
+        return new FeedResource(Feed::find($request->feed_id));
     }
 
     /**
@@ -159,7 +159,7 @@ class FeedController extends Controller
             $image = base64_decode($image_string);
 
             $n++;
-            $imageName = 'public/feed/' . $request->title . (string)$n . '.png';
+            $imageName = 'public/feed/' . $request->title . (string)$request->feed_id . (string)$n . '.png';
             Storage::put($imageName, $image);
 
             $feed->image->filename = $imageName;

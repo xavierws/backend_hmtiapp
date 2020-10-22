@@ -39,11 +39,11 @@ class Feed extends JsonResource
         $arrayOfImg = array();
         foreach ($feed->images as $image) {
             $filename = $image->filename;
-            $imgFile = Storage::get($filename);
+//            $imgFile = Storage::get($filename);
 
-            $encodedImg = base64_encode($imgFile);
+//            $encodedImg = base64_encode($imgFile);
 
-            $arrayOfImg[$n] = $encodedImg;
+            $arrayOfImg[$n] = Storage::url($filename);
             $n++;
         }
 
