@@ -56,6 +56,12 @@ Route::middleware('auth:sanctum')->group(function () {
     //Update the feed data and image
     Route::put('feed/update', [FeedController::class, 'update']);
 
+    //record the viewer of feed
+    Route::post('feed/viewer/input', [FeedController::class, 'inputViewer']);
+
+    //get all feed's viewer
+    Route::get('feed/viewer', [FeedController::class, 'viewer']);
+
     //return the participant's profile
     Route::get('user/profile', [ParticipantController::class, 'index']);
 

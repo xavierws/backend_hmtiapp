@@ -7,6 +7,7 @@ use App\Models\Image;
 use App\Http\Resources\Feed as FeedResource;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
@@ -171,21 +172,46 @@ class FeedController extends Controller
         ]);
     }
 
-    public function inputViewer()
+    /**
+     * record the feed's viewer
+     *
+     * @param Request $request
+     */
+    public function inputViewer(Request $request)
     {
+        $request->validate([
+            'feed_id' => 'required|integer',
+//            'colleger_id' => 'required|integer'
+        ]);
 
+        if ($request->user()->userable_type == 'App\Models\CollegerProfile') {
+            if (! DB::table('seen_by')->where([
+                ['colleger_profile_id', $request->user()->userable_id],
+                ['feed_id', $request->feed_id]
+            ])->exists()) {
+                Feed::find($request->feed_id)->collegerProfiles()->attach($request->user()->userable_id);
+            }
+        }
     }
 
-
-    public function viewer()
+    /**
+     * get all the feed's viewer
+     *
+     * @param Request $request
+     * @return array
+     */
+    public function viewer(Request $request)
     {
-
-        $feed = Feed::find();
+        $request->validate([
+           'feed_id' => 'required|integer'
+        ]);
+        $feed = Feed::find($request->feed_id);
 
         $n = 0;
         $arrayOfName = array();
         foreach ($feed->collegerProfiles as $collegerProfile) {
             $arrayOfName[$n] = $collegerProfile->name;
+            $n++;
         }
 
         return $arrayOfName;
