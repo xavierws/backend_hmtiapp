@@ -34,8 +34,8 @@ class FeedController extends Controller
             ]);
         }
 
-        $image_strings = $request->image_strings;
-
+        //$image_strings = $request->image_strings;
+        $image_string = $request->image_strings;
         Feed::create([
             'title' => $request->title,
             'caption' => $request->caption,
@@ -44,7 +44,7 @@ class FeedController extends Controller
         $feedId = Feed::orderBy('id', 'desc')->first()->value('id');
 
         $n = 0;
-        foreach ($image_strings as $image_string) {
+      //  foreach ($image_strings as $image_string) {
             $image = base64_decode($image_string);
 
             $n++;
@@ -56,7 +56,7 @@ class FeedController extends Controller
                 'imageable_id' => $feedId,
                 'imageable_type' => 'App\Models\Feed'
             ]);
-        }
+     //   }
 
         return response()->json([
             'message' => 'post feed is successful'
