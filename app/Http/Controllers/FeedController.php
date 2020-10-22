@@ -48,7 +48,7 @@ class FeedController extends Controller
             $image = base64_decode($image_string);
 
             $n++;
-            $imageName = 'public/feed/' . $request->title . (string)$feedId . (string)$n . '.png';
+            $imageName = 'public/feed/' . (string)$feedId . (string)$n . '.png';
             Storage::put($imageName, $image);
 
             Image::create([
@@ -155,16 +155,16 @@ class FeedController extends Controller
         $feed->save();
 
         $n = 0;
-        foreach ($request->image_strings as $image_string) {
-            $image = base64_decode($image_string);
+//        foreach ($request->image_strings as $image_string) {
+            $image = base64_decode($request->image_strings);
 
             $n++;
-            $imageName = 'public/feed/' . $request->title . (string)$request->feed_id . (string)$n . '.png';
+            $imageName = 'public/feed/' . (string)$request->feed_id . (string)$n . '.png';
             Storage::put($imageName, $image);
 
             $feed->image->filename = $imageName;
             $feed->image->filename->save();
-        }
+//        }
 
         return response()->json([
             'message' => 'feed has been updated'

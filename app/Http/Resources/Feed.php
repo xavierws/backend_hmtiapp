@@ -44,7 +44,7 @@ class Feed extends JsonResource
 
 //            $encodedImg = base64_encode($imgFile);
 
-            $arrayOfImg[$n] = Storage::path($filename);
+            $arrayOfImg[$n] = asset($filename);
             $n++;
         }
 
