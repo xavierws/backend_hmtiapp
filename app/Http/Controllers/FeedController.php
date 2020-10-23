@@ -227,6 +227,6 @@ class FeedController extends Controller
             $n++;
         }
 
-        return $arrayOfName;
+        return response(Feed::find($request->feed_id)->collegerProfiles()->get());
     }
 }
