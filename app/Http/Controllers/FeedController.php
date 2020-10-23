@@ -190,7 +190,19 @@ class FeedController extends Controller
                 ['feed_id', $request->feed_id]
             ])->exists()) {
                 Feed::find($request->feed_id)->collegerProfiles()->attach($request->user()->userable_id);
+
+                return response()->json([
+                   'message' => 'view recorded'
+                ]);
+            } else {
+                return response()->json([
+                   'message' => 'view has been recorded before'
+                ]);
             }
+        } else {
+            return response()->json([
+               'message' => 'you are an admin, bitch'
+            ]);
         }
     }
 
