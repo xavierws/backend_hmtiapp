@@ -32,8 +32,7 @@ class ParticipantController extends Controller
             'address' => 'required|max:255'
         ]);
 
-
-        $colleger = CollegerProfile::find($request->user()->id);
+        $colleger = CollegerProfile::find($request->user()->userable_id);
         $colleger->name = $request->name;
         $colleger->birthday = $request->birthday;
         $colleger->address = $request->address;
