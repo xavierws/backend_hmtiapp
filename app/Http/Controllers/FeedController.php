@@ -72,6 +72,7 @@ class FeedController extends Controller
     public function index()
     {
         return FeedResource::collection(Feed::orderBy('created_at', 'desc')->get());
+        //return response(Feed::orderBy('created_at', 'desc')->get());
     }
 
     /**
