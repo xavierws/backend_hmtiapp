@@ -26,13 +26,14 @@ class ParticipantController extends Controller
     public function update(Request $request)
     {
         $request->validate([
-            'id' => 'required|integer',
+//            'id' => 'required|integer',
             'name' => 'required',
             'birthday' => 'required',
             'address' => 'required|max:255'
         ]);
 
-        $colleger = CollegerProfile::find($request->id);
+
+        $colleger = CollegerProfile::find($request->user()->id);
         $colleger->name = $request->name;
         $colleger->birthday = $request->birthday;
         $colleger->address = $request->address;
