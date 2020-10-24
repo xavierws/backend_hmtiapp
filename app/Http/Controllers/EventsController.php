@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Calendar as AppCalendar;
 use App\Models\Event;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 
-class CalendarController extends Controller
+
+class EventsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +18,7 @@ class CalendarController extends Controller
      */
     public function index()
     {
-       return response(AppCalendar::all());
+        //
     }
 
     /**
@@ -23,9 +26,37 @@ class CalendarController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $request->validate([
+            'id_calendar' => 'required',
+            'name' => 'required|max:255',
+            'category' => 'required|max:255',
+            'description' => 'required|max:255',
+            'backgroundColor' => 'required|max:255',
+            'startdate' => 'required',
+            'enddate' => 'required'
+        ]);
+
+        if (!$request->user()->tokenCan('user:admin')) {
+            throw ValidationException::withMessages([
+                'user_level' => 'you do not have permission to post events'
+            ]);
+        }
+
+        $event = new Event;
+        $event->id_calendar = $request->id_calendar;
+        $event->name = $request->name;
+        $event->category = $request->category;
+        $event->description =  $request->description;
+        $event->backgroundColor = $request->backgroundColor;
+        $event->startdate =  $request->startdate;
+        $event->enddate = $request->enddate;
+        $event->save();        
+
+        return response()->json([
+            'message' => 'post events is successful'
+        ]);
     }
 
     /**
@@ -35,9 +66,7 @@ class CalendarController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        //
-    }
+    { }
 
     /**
      * Display the specified resource.
