@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\AdministratorProfile;
 use App\Models\CollegerProfile;
+use App\Models\Image;
 use App\Models\User;
 use App\Http\Resources\CollegerProfile as CollegerProfileResource;
 use App\Http\Resources\AdministratorProfile as AdministratorProfileResource;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ParticipantController extends Controller
 {
@@ -41,5 +43,32 @@ class ParticipantController extends Controller
         return response()->json([
             'message' => 'data updated'
         ]);
+    }
+
+    public function uploadPicture(Request $request)
+    {
+        $request->validate([
+           'image_string' => 'required'
+        ]);
+
+        $collegerId = $request->user()->userable_id;
+        $image_string = $request->image_string;
+
+        $image = base64_decode($image_string);
+
+        $imageName = 'public/colleger/' . (string)$collegerId . '.png';
+        Storage::put($imageName, $image);
+
+        if(! Image::where([
+            ['imageable_type', 'App\Models\CollegerProfile'],
+            ['imageable_id', $collegerId]
+        ])->exists()){
+            Image::create([
+                'filename' => $imageName,
+                'imageable_id' => $collegerId,
+                'imageable_type' => 'App\Models\CollegerProfile'
+            ]);
+        }
+
     }
 }

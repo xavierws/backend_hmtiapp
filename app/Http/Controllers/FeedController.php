@@ -177,6 +177,7 @@ class FeedController extends Controller
      * record the feed's viewer
      *
      * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function inputViewer(Request $request)
     {
