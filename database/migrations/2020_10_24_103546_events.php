@@ -19,7 +19,7 @@ class Events extends Migration
             $table->string('name');
             $table->string('category');
             $table->string('description');
-            $table->string('backgroundColor');
+            $table->string('background_color');
             $table->timestamp('startdate')->nullable();
             $table->timestamp('enddate')->nullable();
             $table->timestamps();

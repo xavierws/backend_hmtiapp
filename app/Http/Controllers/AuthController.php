@@ -26,14 +26,14 @@ class AuthController extends Controller
         ]);
 
         $user = User::where('email', $request->email)->first();
-        $userable = User::find($user->id)->userable;
-        $role = $userable->role->name;
 
         if (! $user || ! Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([
                 'email' => ['The provided credentials are incorrect.'],
             ]);
         }
+        $userable = User::find($user->id)->userable;
+        $role = $userable->role->name;
 
         if ($role === 'admin'){
             $token = $user->createToken($request->device_name, ['user:admin'])->plainTextToken;

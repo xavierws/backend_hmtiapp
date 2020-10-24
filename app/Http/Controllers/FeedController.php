@@ -8,6 +8,7 @@ use App\Http\Resources\Feed as FeedResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
@@ -42,19 +43,20 @@ class FeedController extends Controller
             'caption' => $request->caption,
             'day_of_week' => $request->day_of_week
         ]);
-        $feedId = Feed::orderBy('id', 'desc')->limit(1)->value('id');
+        $feed = Feed::orderBy('id', 'desc')->limit(1);
 
         $n = 0;
       //  foreach ($image_strings as $image_string) {
             $image = base64_decode($image_string);
 
             $n++;
-            $imageName = 'public/feed/' . (string)$feedId . (string)$n . '.png';
+            $hashedName = str_replace('/', '', Hash::make($feed->value('updated_at') . $feed->value('title')));
+            $imageName = 'public/feed/' . (string)$feed->value('id') . (string)$n . $hashedName . '.png';
             Storage::put($imageName, $image);
 
             Image::create([
                 'filename' => $imageName,
-                'imageable_id' => $feedId,
+                'imageable_id' => $feed->value('id'),
                 'imageable_type' => 'App\Models\Feed'
             ]);
      //   }
@@ -126,6 +128,11 @@ class FeedController extends Controller
             'feed_id' => 'required'
         ]);
 
+        if (! Feed::find($request->feed_id)->exists())
+            throw ValidationException::withMessages([
+                'message' => 'id is wrong'
+            ]);
+
         return new FeedResource(Feed::find($request->feed_id));
     }
 
@@ -158,14 +165,20 @@ class FeedController extends Controller
 
         $n = 0;
 //        foreach ($request->image_strings as $image_string) {
+        foreach ($feed->images as $images){
+            Storage::delete($images->filename);
             $image = base64_decode($request->image_strings);
 
             $n++;
-            $imageName = 'public/feed/' . (string)$request->feed_id . (string)$n . '.png';
+            $hashedName = str_replace('/', '', Hash::make($feed->value('updated_at') . $feed->value('title')));
+            $imageName = 'public/feed/' . (string)$request->feed_id . (string)$n . $hashedName . '.png';
             Storage::put($imageName, $image);
 
-            $feed->image->filename = $imageName;
-            $feed->image->filename->save();
+
+            $images->filename = $imageName;
+            $images->save();
+        }
+
 //        }
 
         return response()->json([
