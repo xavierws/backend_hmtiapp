@@ -29,11 +29,11 @@ class EventsController extends Controller
     public function create(Request $request)
     {
         $request->validate([
-            'id_calendar' => 'required',
+            'calendar_id' => 'required',
             'name' => 'required|max:255',
             'category' => 'required|max:255',
             'description' => 'required|max:255',
-            'backgroundColor' => 'required|max:255',
+            'background_color' => 'required|max:255',
             'startdate' => 'required',
             'enddate' => 'required'
         ]);
@@ -45,11 +45,11 @@ class EventsController extends Controller
         }
 
         $event = new Event;
-        $event->id_calendar = $request->id_calendar;
+        $event->calendar_id = $request->calendar_id;
         $event->name = $request->name;
         $event->category = $request->category;
         $event->description =  $request->description;
-        $event->backgroundColor = $request->backgroundColor;
+        $event->background_color = $request->background_color;
         $event->startdate =  $request->startdate;
         $event->enddate = $request->enddate;
         $event->save();        
