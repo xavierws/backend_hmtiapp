@@ -15,7 +15,7 @@ class Calendar extends Migration
     {
         Schema::create('calendars', function (Blueprint $table) {
             $table->id();
-            $table->timestamp('tanggal')->nullable();
+            $table->date('date')->nullable();
             $table->timestamps();
         });
     }

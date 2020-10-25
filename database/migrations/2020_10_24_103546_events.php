@@ -15,14 +15,16 @@ class Events extends Migration
     {
         Schema::create('events', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_calendar');
+            $table->foreignId('calendar_id');
             $table->string('name');
             $table->string('category');
             $table->string('description');
             $table->string('background_color');
-            $table->timestamp('startdate')->nullable();
-            $table->timestamp('enddate')->nullable();
+            $table->dateTime('startdate')->nullable();
+            $table->dateTime('enddate')->nullable();
             $table->timestamps();
+
+            $table->foreign('calendar_id')->references('id')->on('calendars');
         });
     }
 
