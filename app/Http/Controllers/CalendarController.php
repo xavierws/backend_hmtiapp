@@ -17,8 +17,14 @@ class CalendarController extends Controller
            'month' => 'required|integer'
         ]);
         $calendar = Calendar::whereMonth('date', $request->month)->get();
-
-        return CalendarResource::collection($calendar);
+        $data = [];
+        foreach($calendar as $calendar2){
+            $data[$calendar2->date] =  Event::where('calendar_id',$calendar2->id)->get();
+        }
+        
+    
+        //return CalendarResource::collection($calendar);
+        return response($data);
     }
 
     /**
