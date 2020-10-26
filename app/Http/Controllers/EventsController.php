@@ -13,9 +13,14 @@ use Illuminate\Validation\ValidationException;
 class EventsController extends Controller
 {
 
+    /**
+     * listing all the event
+     *
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     */
     public function index()
     {
-        return EventResource::collection();
+        return EventResource::collection(Event::all());
     }
 
     /**

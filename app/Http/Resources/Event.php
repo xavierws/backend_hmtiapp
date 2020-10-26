@@ -14,15 +14,17 @@ class Event extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
-    }
-
-    protected function getData () {
-        $calendar = $this->calendar;
-        $this->where('calendar_id', $calendar->id);
-
-
-
-        return [];
+        return [
+            'calendar_id' => $this->calendar_id,
+            'day' => $this->calendar->date,
+            'contain' => [
+                'name' => $this->name,
+                'category' => $this->category,
+                'description' => $this->description,
+                'background_color' => $this->background_color,
+                'start_date' => $this->start_date,
+                'end_date' => $this->end_date
+            ]
+        ];
     }
 }
