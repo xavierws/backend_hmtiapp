@@ -14,15 +14,15 @@ class CalendarController extends Controller
     public function index(Request $request)
     {
         $request->validate([
-           'month' => 'required|integer'
+           'month' => 'required|integer',
+            'year' => 'required|integer'
         ]);
-        $calendar = Calendar::whereMonth('date', $request->month)->get();
+        $calendar = Calendar::whereMonth('date', $request->month)->whereYear('date', $request->year)->get();
         $data = [];
         foreach($calendar as $calendar2){
             $data[$calendar2->date] =  Event::where('calendar_id',$calendar2->id)->get();
         }
-        
-    
+
         //return CalendarResource::collection($calendar);
         return response($data);
     }
