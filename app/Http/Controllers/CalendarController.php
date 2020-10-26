@@ -4,20 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Models\Calendar;
 use App\Models\Event;
+use App\Http\Resources\Calendar as CalendarResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class CalendarController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+
+    public function index(Request $request)
     {
-       
-   
+        $request->validate([
+           'month' => 'required|integer'
+        ]);
+        $calendar = Calendar::whereMonth('date', $request->month)->get();
+
+        return CalendarResource::collection($calendar);
     }
 
     /**

@@ -46,10 +46,12 @@ Route::middleware('auth:sanctum')->group(function () {
     //post the feed
     Route::post('feed/post', [FeedController::class, 'create']);
     Route::post('events/post', [EventsController::class, 'create']);
+
     //show all the feed
     Route::get('feed/index', [FeedController::class, 'index']);
-    Route::get('events/index', [EventsController::class, 'index']);
+//    Route::get('events/index', [EventsController::class, 'index']);
     Route::get('calendar/index', [CalendarController::class, 'index']);
+
     //delete specific feed
     Route::delete('feed/delete', [FeedController::class, 'destroy']);
 

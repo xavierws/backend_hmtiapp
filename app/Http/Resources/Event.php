@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CollegerProfile extends JsonResource
+class Event extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,7 +17,12 @@ class CollegerProfile extends JsonResource
         return parent::toArray($request);
     }
 
-    public function getImage() {
+    protected function getData () {
+        $calendar = $this->calendar;
+        $this->where('calendar_id', $calendar->id);
 
+
+
+        return [];
     }
 }

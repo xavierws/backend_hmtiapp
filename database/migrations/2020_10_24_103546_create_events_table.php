@@ -20,8 +20,8 @@ class Events extends Migration
             $table->string('category');
             $table->string('description');
             $table->string('background_color');
-            $table->dateTime('startdate')->nullable();
-            $table->dateTime('enddate')->nullable();
+            $table->dateTime('start_date')->nullable();
+            $table->dateTime('end_date')->nullable();
             $table->timestamps();
 
             $table->foreign('calendar_id')->references('id')->on('calendars');

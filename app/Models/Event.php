@@ -8,7 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Event extends Model
 {
     use HasFactory;
-    
+
+    /**
+     *
+     *
+     * @var string
+     */
     protected $table = 'events';
 
     /**
@@ -17,12 +22,21 @@ class Event extends Model
      * @var string[]
      */
     protected $fillable = [
-        'id_calendar',
+        'calendar_id',
         'name',
         'category',
         'description',
-        'backgroundColor',
-        'startdate',
-        'enddate'
+        'background_color',
+        'start_date',
+        'end_date'
     ];
+
+    /**
+     * Get the date associated with the event
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function calendar() {
+        return $this->belongsTo('App\Models\Calendar');
+    }
 }
