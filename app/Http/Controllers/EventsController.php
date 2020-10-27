@@ -39,6 +39,30 @@ class EventsController extends Controller
 //        return EventResource::collection(Event::all());
     }
 
+    public function getmarkeddates()
+    {
+        $calendars = Calendar::all();
+//        $events = Event::all();
+//        $events->groupBy('calendar_id')->toArray();
+
+        $arr = Array();
+        foreach ($calendars as $calendar) {
+            if($calendar->events()->exists()) {
+                $events = $calendar->events;
+
+                $arr[$calendar->date] = [
+                    'dotColor' => $events[0]->background_color,
+                    'marked' => 'true'
+                ];
+            }
+        }
+
+        return response($arr);
+
+//        return EventResource::collection(Event::all());
+    }
+
+        
     /**
      * Show the form for creating a new resource.
      *

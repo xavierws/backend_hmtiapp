@@ -50,6 +50,7 @@ Route::middleware('auth:sanctum')->group(function () {
     //show all the feed
     Route::get('feed/index', [FeedController::class, 'index']);
     Route::get('event/index', [EventsController::class, 'index']);
+    Route::get('event/markeddates', [EventsController::class, 'getmarkeddates']);
     Route::get('calendar/index', [CalendarController::class, 'index']);
 
     //delete specific feed
