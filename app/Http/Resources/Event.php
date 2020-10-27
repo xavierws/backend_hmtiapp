@@ -27,4 +27,8 @@ class Event extends JsonResource
             ]
         ];
     }
+
+    protected function transformContain() {
+        //
+    }
 }

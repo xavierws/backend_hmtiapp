@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Calendar;
 use App\Models\Event;
 use Illuminate\Http\Request;
 use App\Http\Resources\Event as EventResource;
@@ -13,14 +14,20 @@ use Illuminate\Validation\ValidationException;
 class EventsController extends Controller
 {
 
-    /**
-     * listing all the event
-     *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
-     */
+
     public function index()
     {
-        return EventResource::collection(Event::all());
+        $events = Event::all();
+        $events->groupBy('calendar_id')->toJson();
+
+        $arr = Array();
+//        foreach ($events as $event) {
+//            $arr[$event] =
+//        }
+
+        return response($events);
+
+//        return EventResource::collection(Event::all());
     }
 
     /**
@@ -52,7 +59,7 @@ class EventsController extends Controller
             'name' => $request->name,
             'category' => $request->category,
             'description' => $request->description,
-            'backgroundColor' => $request->background_color,
+            'background_color' => $request->background_color,
             'start_date' => $request->start_date,
             'end_date' => $request->end_date
         ]);

@@ -88,6 +88,8 @@ class AuthController extends Controller
            'email' => 'required|email'
         ]);
 
+        $user = User::where('email', $request->email);
+
 
     }
 
