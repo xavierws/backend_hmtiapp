@@ -17,14 +17,14 @@ class Event extends JsonResource
         return [
             'calendar_id' => $this->calendar_id,
             'day' => $this->calendar->date,
-            'contain' => [
+            'contain' => [[
                 'name' => $this->name,
                 'category' => $this->category,
                 'description' => $this->description,
                 'background_color' => $this->background_color,
                 'start_date' => $this->start_date,
                 'end_date' => $this->end_date
-            ]
+            ]]
         ];
     }
 

@@ -18,7 +18,6 @@
   <component name="ChangeListManager">
     <list default="true" id="46ca1f6c-3fa9-401b-b00c-bd5d2e7d575b" name="Default Changelist" comment="index in EventsController.php">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/AuthController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/AuthController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/EventsController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/EventsController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Resources/Event.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Resources/Event.php" afterDir="false" />
     </list>
@@ -222,7 +221,8 @@
       <workItem from="1603556352015" duration="5217000" />
       <workItem from="1603618036049" duration="4730000" />
       <workItem from="1603646648461" duration="9065000" />
-      <workItem from="1603774805465" duration="1798000" />
+      <workItem from="1603774805465" duration="2729000" />
+      <workItem from="1603800221497" duration="2456000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <created>1602537736276</created>
@@ -399,7 +399,14 @@
       <option name="project" value="LOCAL" />
       <updated>1603692427906</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="update EventsController.php">
+      <created>1603777281115</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1603777281116</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -453,7 +460,8 @@
     <MESSAGE value="fixing index in CalendarController.php and fixing Calendar.php in reousurces" />
     <MESSAGE value="fixing parameter index in CalendarController.php" />
     <MESSAGE value="index in EventsController.php" />
-    <option name="LAST_COMMIT_MESSAGE" value="index in EventsController.php" />
+    <MESSAGE value="update EventsController.php" />
+    <option name="LAST_COMMIT_MESSAGE" value="update EventsController.php" />
   </component>
   <component name="WindowStateProjectService">
     <state x="520" y="222" key="#Images" timestamp="1602405474002">
@@ -476,10 +484,10 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="499" y="167" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1536.824@0.0.1536.824" timestamp="1603425924665" />
-    <state x="93" y="93" width="1350" height="638" key="DiffContextDialog" timestamp="1603688449699">
+    <state x="93" y="93" width="1350" height="638" key="DiffContextDialog" timestamp="1603777805599">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="93" y="93" width="1350" height="638" key="DiffContextDialog/0.0.1536.824@0.0.1536.824" timestamp="1603688449699" />
+    <state x="93" y="93" width="1350" height="638" key="DiffContextDialog/0.0.1536.824@0.0.1536.824" timestamp="1603777805599" />
     <state x="548" y="153" key="FileChooserDialogImpl" timestamp="1602557286298">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -500,14 +508,14 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="277" y="57" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1603217947563" />
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1603692445393">
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1603777285645">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1603692445393" />
-    <state x="586" y="326" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1603688471100">
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1603777285645" />
+    <state x="586" y="326" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1603800231576">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="586" y="326" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.824@0.0.1536.824" timestamp="1603688471100" />
+    <state x="586" y="326" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.824@0.0.1536.824" timestamp="1603800231576" />
     <state x="478" y="11" width="579" height="801" key="find.popup" timestamp="1603032741671">
       <screen x="0" y="0" width="1536" height="824" />
     </state>

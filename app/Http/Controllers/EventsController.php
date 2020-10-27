@@ -17,15 +17,24 @@ class EventsController extends Controller
 
     public function index()
     {
-        $events = Event::all();
-        $events->groupBy('calendar_id')->toJson();
+        $calendars = Calendar::all();
+//        $events = Event::all();
+//        $events->groupBy('calendar_id')->toArray();
 
         $arr = Array();
-//        foreach ($events as $event) {
-//            $arr[$event] =
-//        }
+        foreach ($calendars as $calendar) {
+            if($calendar->events()->exists()) {
+                $events = $calendar->events;
 
-        return response($events);
+                $arr[] = [
+                    'calendar_id' => $calendar->id,
+                    'day' => $calendar->date,
+                    'contain' => $events
+                ];
+            }
+        }
+
+        return response($arr);
 
 //        return EventResource::collection(Event::all());
     }
