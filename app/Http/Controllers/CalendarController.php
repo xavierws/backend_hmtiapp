@@ -11,6 +11,12 @@ use Illuminate\Support\Facades\DB;
 class CalendarController extends Controller
 {
 
+    /**
+     *
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
     public function index(Request $request)
     {
         $request->validate([

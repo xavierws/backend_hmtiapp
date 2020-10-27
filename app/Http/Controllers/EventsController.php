@@ -14,7 +14,11 @@ use Illuminate\Validation\ValidationException;
 class EventsController extends Controller
 {
 
-
+    /**
+     * list all the event
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
     public function index()
     {
         $calendars = Calendar::all();
@@ -39,6 +43,11 @@ class EventsController extends Controller
 //        return EventResource::collection(Event::all());
     }
 
+    /**
+     *
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
     public function getmarkeddates()
     {
         $calendars = Calendar::all();
@@ -62,7 +71,7 @@ class EventsController extends Controller
 //        return EventResource::collection(Event::all());
     }
 
-        
+
     /**
      * Show the form for creating a new resource.
      *
@@ -113,56 +122,85 @@ class EventsController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    { }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return EventResource
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        //
+        $request->validate([
+           'event_id' => 'required|integer'
+        ]);
+
+        return new EventResource(Event::find($request->event_id));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws ValidationException
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $request->validate([
+            'event_id' => 'required|integer',
+            'calendar_id' => 'required|integer',
+            'name' => 'required|max:255',
+            'category' => 'required|max:255',
+            'description' => 'required|max:255',
+            'background_color' => 'required|max:255',
+            'start_date' => 'required',
+            'end_date' => 'required'
+        ]);
+
+        if (!$request->user()->tokenCan('user:admin')) {
+            throw ValidationException::withMessages([
+                'user_level' => 'you do not have permission to post events'
+            ]);
+        }
+
+        $event = Event::find($request->event_id);
+
+        $event->calendar_id = $request->calendar_id;
+        $event->name = $request->name;
+        $event->category = $request->category;
+        $event->description =  $request->description;
+        $event->background_color = $request->background_color;
+        $event->start_date =  $request->start_date;
+        $event->end_date = $request->end_date;
+        $event->save();
+
+        return response()->json([
+            'message' => 'event is updated'
+        ]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws ValidationException
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        $request->validate([
+           'event_id' => 'required|integer'
+        ]);
+
+        if (!$request->user()->tokenCan('user:admin')) {
+            throw ValidationException::withMessages([
+                'user_level' => 'you do not have permission to post events'
+            ]);
+        }
+
+        Event::find($request->event_id)->delete();
+
+        return response()->json([
+           'message' => 'event is deleted'
+        ]);
     }
 }

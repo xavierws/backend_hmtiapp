@@ -45,13 +45,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //post the feed
     Route::post('feed/post', [FeedController::class, 'create']);
-    Route::post('events/post', [EventsController::class, 'create']);
 
     //show all the feed
     Route::get('feed/index', [FeedController::class, 'index']);
-    Route::get('event/index', [EventsController::class, 'index']);
-    Route::get('event/markeddates', [EventsController::class, 'getmarkeddates']);
-    Route::get('calendar/index', [CalendarController::class, 'index']);
 
     //delete specific feed
     Route::delete('feed/delete', [FeedController::class, 'destroy']);
@@ -74,12 +70,29 @@ Route::middleware('auth:sanctum')->group(function () {
     //update colleger data
     Route::put('user/update', [ParticipantController::class, 'update']);
 
+    //create an event
+    Route::post('event/post', [EventsController::class, 'create']);
+
+    //get all events
+    Route::get('event/index', [EventsController::class, 'index']);
+
+    //get all marked dates
+    Route::get('event/markeddates', [EventsController::class, 'getmarkeddates']);
+
+    //get an event
+    Route::get('event/edit', [EventsController::class, 'edit']);
+
+    //update an event
+    Route::put('event/update', [EventsController::class, 'update']);
+
+    //delete event
+    Route::delete('event/delete', [EventsController::class, 'destroy']);
+
+    //get all dates from calendar
+    Route::get('calendar/index', [CalendarController::class, 'index']);
+
     //logout and revoke token
     Route::post('logout', function (Request $request) {
-//        $request->validate([
-//            'email' => 'required|email',
-//        ]);
-//        $user = \App\Models\User::where('email', $request->email)->first();
         $user = \App\Models\User::where('email', $request->user()->email)->first();
 
         $user->tokens()->delete();
