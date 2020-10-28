@@ -27,7 +27,7 @@ class EventsController extends Controller
             'offset' => 'required|integer'
         ]);
 
-        $calendars = Calendar::all()->offset($request->offset)->limit($request->limit);
+        $calendars = Calendar::offset($request->offset)->limit($request->limit)->get();
         //        $events = Event::all();
         //        $events->groupBy('calendar_id')->toArray();
 
