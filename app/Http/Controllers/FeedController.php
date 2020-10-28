@@ -71,9 +71,21 @@ class FeedController extends Controller
      *
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function index()
+    public function index(Request $request)
     {
-        return FeedResource::collection(Feed::orderBy('created_at', 'desc')->get());
+        $request->validate([
+            'limit' => 'required|integer',
+            'offset' => 'required|integer'
+        ]);
+
+//        $feeds = DB::table('')
+
+        return FeedResource::collection(
+            Feed::orderBy('created_at', 'desc')
+            ->offset($request->offset)
+            ->limit($request->limit)
+            ->get()
+        );
         //return response(Feed::orderBy('created_at', 'desc')->get());
     }
 
