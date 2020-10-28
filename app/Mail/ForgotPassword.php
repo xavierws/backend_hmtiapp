@@ -12,13 +12,20 @@ class ForgotPassword extends Mailable
     use Queueable, SerializesModels;
 
     /**
+     * key that is used for verification
+     *
+     * @var
+     */
+    public $key;
+
+    /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($key)
     {
-        //
+        $this->key = $key;
     }
 
     /**
@@ -28,6 +35,7 @@ class ForgotPassword extends Mailable
      */
     public function build()
     {
-        return $this->view('view.mailKey');
+        return $this->subject('reset password')
+                    ->view('emails.mailKey');
     }
 }
