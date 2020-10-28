@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ForgotPassword;
+use App\Models\PasswordReset;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -80,21 +82,88 @@ class AuthController extends Controller
         ]);
     }
 
+    /**
+     * get a key token
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws ValidationException
+     */
     public function forgotPassword(Request $request)
     {
-        $key = mt_rand(100000, 999999);
-
         $request->validate([
            'email' => 'required|email'
         ]);
 
-        $user = User::where('email', $request->email);
+        $user = User::where('email', $request->email)->first();
 
+        if (! $user) {
+            throw ValidationException::withMessages([
+               'email' => 'your email is wrong'
+            ]);
+        }
 
+        $key = mt_rand(100000, 999999);
+        PasswordReset::create([
+            'email' => $request->email,
+            'token' => Hash::make($key),
+            'created_at' => now()
+        ]);
+
+        Mail::to($request->email)->send(new ForgotPassword($key));
+
+        return response()->json([
+            'email' => $request->email,
+            'message' => 'your verification code has been sent to your email'
+        ]);
     }
 
-    public function resetPassword()
-    {
+    /**
+     * checking the key token
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws ValidationException
+     */
+    public function checkToken(Request $request) {
+        $request->validate([
+            'email' => 'required|email',
+            'token' => 'required'
+        ]);
 
+        $email = PasswordReset::where('email', $request->email)->orderBy('created_at', 'desc')->first();
+
+        if (! Hash::check($request->token, $email->token) || ! $email || $email->is_used == true) {
+            throw ValidationException::withMessages([
+                'token' => 'your token is wrong'
+            ]);
+        }
+
+        return response()->json([
+           'token' => 'validated'
+        ]);
+    }
+
+    /**
+     * reset the old password with a new password
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+           'email' => 'required|email',
+           'new_password' => 'required'
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+
+        $user->password = Hash::make($request->new_password);
+        $user->save();
+
+        return response()->json([
+            'message' => 'your password has been reset, please login again'
+        ]);
     }
 }

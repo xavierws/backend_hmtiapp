@@ -23,10 +23,13 @@ use Illuminate\Support\Facades\Route;
 Route::post('login', [AuthController::class, 'login']);
 
 //Send key to the user's email
+Route::post('forgot-password', [AuthController::class, 'forgotPassword']);
 
+//check token
+Route::post('check-token', [AuthController::class, 'checkToken']);
 
 //reset password
-
+Route::post('reset-password', [AuthController::class, 'resetPassword'])->middleware('check.token');
 
 
 //Route group for middleware
