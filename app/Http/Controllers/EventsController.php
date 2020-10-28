@@ -61,7 +61,7 @@ class EventsController extends Controller
 
                 $arr[$calendar->date] = [
                     'dotColor' => $events[0]->background_color,
-                    'marked' => 'true'
+                    'marked' => true
                 ];
             }
         }
