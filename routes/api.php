@@ -48,7 +48,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //show all the feed
     Route::get('feed/index', [FeedController::class, 'index']);
-
+    Route::get('feed/searchfeed', [FeedController::class, 'searchfeed']);
     //delete specific feed
     Route::delete('feed/delete', [FeedController::class, 'destroy']);
 

@@ -81,7 +81,7 @@ class EventsController extends Controller
     public function create(Request $request)
     {
         $request->validate([
-            'calendar_id' => 'required|integer',
+            'calendar_date' => 'required',
             'name' => 'required|max:255',
             'category' => 'required|max:255',
             'description' => 'required|max:255',
@@ -95,9 +95,9 @@ class EventsController extends Controller
                 'user_level' => 'you do not have permission to post events'
             ]);
         }
-
+        $calendar2 = Calendar::where('date',$request->calendar_date)->first();
         Event::create([
-            'calendar_id' => $request->calendar_id,
+            'calendar_id' => $calendar2->id,
             'name' => $request->name,
             'category' => $request->category,
             'description' => $request->description,

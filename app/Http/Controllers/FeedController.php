@@ -77,6 +77,12 @@ class FeedController extends Controller
         //return response(Feed::orderBy('created_at', 'desc')->get());
     }
 
+    public function searchfeed(Request $request)
+    {
+        return FeedResource::collection(Feed::where('title','LIKE','%'.$request->search.'%')->orWhere('caption','LIKE','%'.$request->search.'%')->orderBy('created_at', 'desc')->get());
+        //return response(Feed::orderBy('created_at', 'desc')->get());
+    }
+
     /**
      * Delete the corresponding feed
      *
