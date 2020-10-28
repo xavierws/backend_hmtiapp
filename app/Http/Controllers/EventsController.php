@@ -22,7 +22,12 @@ class EventsController extends Controller
      */
     public function index(Request $request)
     {
-        $calendars = Calendar::all();
+        $request->validate([
+            'limit' => 'required|integer',
+            'offset' => 'required|integer'
+        ]);
+
+        $calendars = Calendar::all()->offset($request->offset)->limit($request->limit);
         //        $events = Event::all();
         //        $events->groupBy('calendar_id')->toArray();
 
