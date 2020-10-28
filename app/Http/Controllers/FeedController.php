@@ -174,9 +174,9 @@ class FeedController extends Controller
             'caption' => 'required|max:3000'
         ]);
 
-        if ($request->user()->userable_type == 'App\Models\CollegerProfile') {
+        if ($request->user()->userable_type != 'App\Models\AdministratorProfile') {
             throw ValidationException::withMessages([
-                'user_level' => 'you do not have permission to delete feed'
+                'user_level' => 'you do not have permission to update feed'
             ]);
         }
 
