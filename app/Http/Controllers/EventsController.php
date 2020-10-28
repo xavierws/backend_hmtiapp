@@ -19,15 +19,15 @@ class EventsController extends Controller
      *
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $calendars = Calendar::all();
-//        $events = Event::all();
-//        $events->groupBy('calendar_id')->toArray();
+        //        $events = Event::all();
+        //        $events->groupBy('calendar_id')->toArray();
 
-        $arr = Array();
+        $arr = array();
         foreach ($calendars as $calendar) {
-            if($calendar->events()->exists()) {
+            if ($calendar->events()->exists()) {
                 $events = $calendar->events;
 
                 $arr[] = [
@@ -40,8 +40,37 @@ class EventsController extends Controller
 
         return response($arr);
 
-//        return EventResource::collection(Event::all());
+        //        return EventResource::collection(Event::all());
     }
+
+    public function notif($name, $description)
+    {
+        $data = [
+            "to" => "/topics/event",
+            "notification" =>
+            [
+                "title" => $name,
+                "body" => $description
+            ],
+        ];
+        $dataString = json_encode($data);
+
+        $headers = [
+            'Authorization: key=AAAA7DnAwoc:APA91bEiqEGplmavyMQZzT4iqmU-RDpmGyE6CLYr31aBWsiLGRZymQlZhyqbeNyPfJyt-Uqxi0TXgrm-TPCkDYMFMvcMArpw-2s5pwet0IrbP_4ayyJdk5JYjJg24SFXsIf6BQro0r66',
+            'Content-Type: application/json',
+        ];
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
+
+        curl_exec($ch);
+    }
+
 
     /**
      *
@@ -51,12 +80,12 @@ class EventsController extends Controller
     public function getmarkeddates()
     {
         $calendars = Calendar::all();
-//        $events = Event::all();
-//        $events->groupBy('calendar_id')->toArray();
+        //        $events = Event::all();
+        //        $events->groupBy('calendar_id')->toArray();
 
-        $arr = Array();
+        $arr = array();
         foreach ($calendars as $calendar) {
-            if($calendar->events()->exists()) {
+            if ($calendar->events()->exists()) {
                 $events = $calendar->events;
 
                 $arr[$calendar->date] = [
@@ -68,7 +97,7 @@ class EventsController extends Controller
 
         return response($arr);
 
-//        return EventResource::collection(Event::all());
+        //        return EventResource::collection(Event::all());
     }
 
 
@@ -95,7 +124,7 @@ class EventsController extends Controller
                 'user_level' => 'you do not have permission to post events'
             ]);
         }
-        $calendar2 = Calendar::where('date',$request->calendar_date)->first();
+        $calendar2 = Calendar::where('date', $request->calendar_date)->first();
         Event::create([
             'calendar_id' => $calendar2->id,
             'name' => $request->name,
@@ -106,18 +135,19 @@ class EventsController extends Controller
             'end_date' => $request->end_date
         ]);
 
-//        $event = new Event;
-//        $event->id_calendar = $request->id_calendar;
-//        $event->name = $request->name;
-//        $event->category = $request->category;
-//        $event->description =  $request->description;
-//        $event->backgroundColor = $request->backgroundColor;
-//        $event->startdate =  $request->startdate;
-//        $event->enddate = $request->enddate;
-//        $event->save();
-
+        //        $event = new Event;
+        //        $event->id_calendar = $request->id_calendar;
+        //        $event->name = $request->name;
+        //        $event->category = $request->category;
+        //        $event->description =  $request->description;
+        //        $event->backgroundColor = $request->backgroundColor;
+        //        $event->startdate =  $request->startdate;
+        //        $event->enddate = $request->enddate;
+        //        $event->save();
+        $this->notif($request->name, $request->description);
         return response()->json([
             'message' => 'post events is successful'
+
         ]);
     }
 
@@ -130,7 +160,7 @@ class EventsController extends Controller
     public function edit(Request $request)
     {
         $request->validate([
-           'event_id' => 'required|integer'
+            'event_id' => 'required|integer'
         ]);
 
         return new EventResource(Event::find($request->event_id));
@@ -188,7 +218,7 @@ class EventsController extends Controller
     public function destroy(Request $request)
     {
         $request->validate([
-           'event_id' => 'required|integer'
+            'event_id' => 'required|integer'
         ]);
 
         if (!$request->user()->tokenCan('user:admin')) {
@@ -200,7 +230,7 @@ class EventsController extends Controller
         Event::find($request->event_id)->delete();
 
         return response()->json([
-           'message' => 'event is deleted'
+            'message' => 'event is deleted'
         ]);
     }
 }
