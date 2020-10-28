@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 
 //login and issue token
 Route::post('login', [AuthController::class, 'login']);
-//Route::get('notif/{name}/{description}', [AuthController::class, 'notif']);
+Route::get('notif/{name}/{description}', [AuthController::class, 'notif']);
 
 //Send key to the user's email
 Route::post('forgot-password', [AuthController::class, 'forgotPassword']);
@@ -67,10 +67,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //get all feed's viewer
     Route::get('feed/viewer', [FeedController::class, 'viewer']);
-
-    //return the participant's profile
     Route::get('user/profile', [ParticipantController::class, 'index']);
-
+    Route::put('user/updatefoto', [ParticipantController::class, 'uploadPicture']);
     //update colleger data
     Route::put('user/update', [ParticipantController::class, 'update']);
 

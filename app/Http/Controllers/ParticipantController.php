@@ -10,6 +10,8 @@ use App\Http\Resources\CollegerProfile as CollegerProfileResource;
 use App\Http\Resources\AdministratorProfile as AdministratorProfileResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 class ParticipantController extends Controller
 {
@@ -28,18 +30,33 @@ class ParticipantController extends Controller
     public function update(Request $request)
     {
         $request->validate([
-//            'id' => 'required|integer',
+            //            'id' => 'required|integer',
             'name' => 'required',
             'birthday' => 'required',
-            'address' => 'required|max:255'
+            'address' => 'required|max:255',
+            'password' => 'nullable',
+            'new_password' => 'nullable'
         ]);
 
         $colleger = CollegerProfile::find($request->user()->userable_id);
         $colleger->name = $request->name;
         $colleger->birthday = $request->birthday;
         $colleger->address = $request->address;
-        $colleger->save();
+   
+        if ($request->password) {
+            $user = $request->user();
+            //        $user = User::where('email', $request->email)->first();
 
+            if (!Hash::check($request->password, $user->password)) {
+                throw ValidationException::withMessages([
+                    'email' => ['Password are incorrect.']
+                ]);
+            }
+
+            $user->password = Hash::make($request->new_password);
+            $user->save();
+        }
+        $colleger->save();
         return response()->json([
             'message' => 'data updated'
         ]);
@@ -48,7 +65,7 @@ class ParticipantController extends Controller
     public function uploadPicture(Request $request)
     {
         $request->validate([
-           'image_string' => 'required'
+            'image_string' => 'required'
         ]);
 
         $collegerId = $request->user()->userable_id;
@@ -56,19 +73,21 @@ class ParticipantController extends Controller
 
         $image = base64_decode($image_string);
 
-        $imageName = 'public/colleger/' . (string)$collegerId . '.png';
+        $imageName = 'public/colleger/' . (string) $collegerId . '.png';
         Storage::put($imageName, $image);
 
-        if(! Image::where([
+        if (!Image::where([
             ['imageable_type', 'App\Models\CollegerProfile'],
             ['imageable_id', $collegerId]
-        ])->exists()){
+        ])->exists()) {
             Image::create([
                 'filename' => $imageName,
                 'imageable_id' => $collegerId,
                 'imageable_type' => 'App\Models\CollegerProfile'
             ]);
         }
-
+        return response()->json([
+            'message' => 'data updated'
+        ]);
     }
 }
