@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\PushNotification;
 use App\Models\Calendar;
 use App\Models\Event;
 use Illuminate\Http\Request;
@@ -43,33 +44,33 @@ class EventsController extends Controller
         //        return EventResource::collection(Event::all());
     }
 
-    public function notif($name, $description)
-    {
-        $data = [
-            "to" => "/topics/event",
-            "notification" =>
-            [
-                "title" => $name,
-                "body" => $description
-            ],
-        ];
-        $dataString = json_encode($data);
-
-        $headers = [
-            'Authorization: key=AAAA7DnAwoc:APA91bEiqEGplmavyMQZzT4iqmU-RDpmGyE6CLYr31aBWsiLGRZymQlZhyqbeNyPfJyt-Uqxi0TXgrm-TPCkDYMFMvcMArpw-2s5pwet0IrbP_4ayyJdk5JYjJg24SFXsIf6BQro0r66',
-            'Content-Type: application/json',
-        ];
-
-        $ch = curl_init();
-
-        curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
-
-        curl_exec($ch);
-    }
+//    public function notif($title, $description)
+//    {
+//        $data = [
+//            "to" => "/topics/event",
+//            "notification" =>
+//            [
+//                "title" => $title,
+//                "body" => $description
+//            ],
+//        ];
+//        $dataString = json_encode($data);
+//
+//        $headers = [
+//            'Authorization: key=AAAA7DnAwoc:APA91bEiqEGplmavyMQZzT4iqmU-RDpmGyE6CLYr31aBWsiLGRZymQlZhyqbeNyPfJyt-Uqxi0TXgrm-TPCkDYMFMvcMArpw-2s5pwet0IrbP_4ayyJdk5JYjJg24SFXsIf6BQro0r66',
+//            'Content-Type: application/json',
+//        ];
+//
+//        $ch = curl_init();
+//
+//        curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+//        curl_setopt($ch, CURLOPT_POST, true);
+//        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+//        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+//        curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
+//
+//        curl_exec($ch);
+//    }
 
 
     /**
@@ -144,10 +145,11 @@ class EventsController extends Controller
         //        $event->startdate =  $request->startdate;
         //        $event->enddate = $request->enddate;
         //        $event->save();
-        $this->notif($request->name, $request->description);
+
+        PushNotification::handle('new event', $request->name);
+
         return response()->json([
             'message' => 'post events is successful'
-
         ]);
     }
 

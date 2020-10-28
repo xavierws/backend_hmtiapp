@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 
 //login and issue token
 Route::post('login', [AuthController::class, 'login']);
-Route::get('notif/{name}/{description}', [AuthController::class, 'notif']);
+//Route::get('notif/{name}/{description}', [AuthController::class, 'notif']);
 
 //Send key to the user's email
 Route::post('forgot-password', [AuthController::class, 'forgotPassword']);

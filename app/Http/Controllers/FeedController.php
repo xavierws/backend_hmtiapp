@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\PushNotification;
 use App\Models\Feed;
 use App\Models\Image;
 use App\Http\Resources\Feed as FeedResource;
@@ -60,6 +61,8 @@ class FeedController extends Controller
                 'imageable_type' => 'App\Models\Feed'
             ]);
      //   }
+
+        PushNotification::handle('new feed', $request->title);
 
         return response()->json([
             'message' => 'post feed is successful'
@@ -139,6 +142,7 @@ class FeedController extends Controller
      *
      * @param Request $request
      * @return FeedResource
+     * @throws ValidationException
      */
     public function edit(Request $request)
     {
@@ -243,7 +247,7 @@ class FeedController extends Controller
      * get all the feed's viewer
      *
      * @param Request $request
-     * @return array
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     public function viewer(Request $request)
     {
