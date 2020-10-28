@@ -125,11 +125,18 @@ class EventsController extends Controller
             'end_date' => 'required'
         ]);
 
-        if (!$request->user()->tokenCan('user:admin')) {
+//        if (!$request->user()->tokenCan('user:admin')) {
+//            throw ValidationException::withMessages([
+//                'user_level' => 'you do not have permission to post events'
+//            ]);
+//        }
+
+        if ($request->user()->userable_type != 'App\Models\AdministratorProfile') {
             throw ValidationException::withMessages([
-                'user_level' => 'you do not have permission to post events'
+                'user_level' => 'you do not have permission to post feed'
             ]);
         }
+
         $calendar2 = Calendar::where('date', $request->calendar_date)->first();
         Event::create([
             'calendar_id' => $calendar2->id,
@@ -193,9 +200,15 @@ class EventsController extends Controller
             'end_date' => 'required'
         ]);
 
-        if (!$request->user()->tokenCan('user:admin')) {
+//        if (!$request->user()->tokenCan('user:admin')) {
+//            throw ValidationException::withMessages([
+//                'user_level' => 'you do not have permission to post events'
+//            ]);
+//        }
+
+        if ($request->user()->userable_type != 'App\Models\AdministratorProfile') {
             throw ValidationException::withMessages([
-                'user_level' => 'you do not have permission to post events'
+                'user_level' => 'you do not have permission to post feed'
             ]);
         }
 
@@ -228,9 +241,15 @@ class EventsController extends Controller
             'event_id' => 'required|integer'
         ]);
 
-        if (!$request->user()->tokenCan('user:admin')) {
+//        if (!$request->user()->tokenCan('user:admin')) {
+//            throw ValidationException::withMessages([
+//                'user_level' => 'you do not have permission to post events'
+//            ]);
+//        }
+
+        if ($request->user()->userable_type != 'App\Models\AdministratorProfile') {
             throw ValidationException::withMessages([
-                'user_level' => 'you do not have permission to post events'
+                'user_level' => 'you do not have permission to post feed'
             ]);
         }
 

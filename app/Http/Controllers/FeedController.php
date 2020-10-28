@@ -31,7 +31,7 @@ class FeedController extends Controller
             'day_of_week' => 'required'
         ]);
 
-        if (! $request->user()->tokenCan('user:admin')) {
+        if ($request->user()->userable_type != 'App\Models\AdministratorProfile') {
             throw ValidationException::withMessages([
                 'user_level' => 'you do not have permission to post feed'
             ]);
@@ -111,9 +111,15 @@ class FeedController extends Controller
             'feed_id' => 'required|integer'
         ]);
 
-        if (! $request->user()->tokenCan('user:admin')) {
+//        if (! $request->user()->tokenCan('user:admin')) {
+//            throw ValidationException::withMessages([
+//                'user_level' => 'you do not have permission to delete feed'
+//            ]);
+//        }
+
+        if ($request->user()->userable_type != 'App\Models\AdministratorProfile') {
             throw ValidationException::withMessages([
-                'user_level' => 'you do not have permission to delete feed'
+                'user_level' => 'you do not have permission to post feed'
             ]);
         }
 
@@ -174,9 +180,15 @@ class FeedController extends Controller
             'caption' => 'required|max:3000'
         ]);
 
-        if (! $request->user()->tokenCan('user:admin')) {
+//        if (! $request->user()->tokenCan('user:admin')) {
+//            throw ValidationException::withMessages([
+//                'user_level' => 'you do not have permission to delete feed'
+//            ]);
+//        }
+
+        if ($request->user()->userable_type != 'App\Models\AdministratorProfile') {
             throw ValidationException::withMessages([
-                'user_level' => 'you do not have permission to delete feed'
+                'user_level' => 'you do not have permission to post feed'
             ]);
         }
 
