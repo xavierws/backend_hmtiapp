@@ -31,7 +31,7 @@ class FeedController extends Controller
             'day_of_week' => 'required'
         ]);
 
-        if (! $request->user()->tokenCan('user:admin')) {
+        if (!$request->user()->tokenCan('user:admin')) {
             throw ValidationException::withMessages([
                 'user_level' => 'you do not have permission to post feed'
             ]);
@@ -47,20 +47,20 @@ class FeedController extends Controller
         $feed = Feed::orderBy('id', 'desc')->limit(1);
 
         $n = 0;
-      //  foreach ($image_strings as $image_string) {
-            $image = base64_decode($image_string);
+        //  foreach ($image_strings as $image_string) {
+        $image = base64_decode($image_string);
 
-            $n++;
-            $hashedName = str_replace('/', '', Hash::make($feed->value('updated_at') . $feed->value('title')));
-            $imageName = 'public/feed/' . (string)$feed->value('id') . (string)$n . $hashedName . '.png';
-            Storage::put($imageName, $image);
+        $n++;
+        $hashedName = str_replace('/', '', Hash::make($feed->value('updated_at') . $feed->value('title')));
+        $imageName = 'public/feed/' . (string) $feed->value('id') . (string) $n . $hashedName . '.png';
+        Storage::put($imageName, $image);
 
-            Image::create([
-                'filename' => $imageName,
-                'imageable_id' => $feed->value('id'),
-                'imageable_type' => 'App\Models\Feed'
-            ]);
-     //   }
+        Image::create([
+            'filename' => $imageName,
+            'imageable_id' => $feed->value('id'),
+            'imageable_type' => 'App\Models\Feed'
+        ]);
+        //   }
 
         PushNotification::handle('new feed', $request->title);
 
@@ -81,20 +81,20 @@ class FeedController extends Controller
             'offset' => 'required|integer'
         ]);
 
-//        $feeds = DB::table('')
+        //        $feeds = DB::table('')
 
         return FeedResource::collection(
             Feed::orderBy('created_at', 'desc')
-            ->offset($request->offset)
-            ->limit($request->limit)
-            ->get()
+                ->offset($request->offset)
+                ->limit($request->limit)
+                ->get()
         );
         //return response(Feed::orderBy('created_at', 'desc')->get());
     }
 
     public function searchfeed(Request $request)
     {
-        return FeedResource::collection(Feed::where('title','LIKE','%'.$request->search.'%')->orWhere('caption','LIKE','%'.$request->search.'%')->orderBy('created_at', 'desc')->get());
+        return FeedResource::collection(Feed::where('title', 'LIKE', '%' . $request->search . '%')->orWhere('caption', 'LIKE', '%' . $request->search . '%')->orderBy('created_at', 'desc')->get());
         //return response(Feed::orderBy('created_at', 'desc')->get());
     }
 
@@ -111,7 +111,7 @@ class FeedController extends Controller
             'feed_id' => 'required|integer'
         ]);
 
-        if (! $request->user()->tokenCan('user:admin')) {
+        if (!$request->user()->tokenCan('user:admin')) {
             throw ValidationException::withMessages([
                 'user_level' => 'you do not have permission to delete feed'
             ]);
@@ -133,7 +133,7 @@ class FeedController extends Controller
         $feed->delete();
 
         return response()->json([
-           'message' => 'the feed has been deleted'
+            'message' => 'the feed has been deleted'
         ]);
     }
 
@@ -150,7 +150,7 @@ class FeedController extends Controller
             'feed_id' => 'required'
         ]);
 
-        if (! Feed::find($request->feed_id)->exists())
+        if (!Feed::find($request->feed_id)->exists())
             throw ValidationException::withMessages([
                 'message' => 'id is wrong'
             ]);
@@ -169,12 +169,12 @@ class FeedController extends Controller
     {
         $request->validate([
             'feed_id' => 'required',
-            'image_strings' => 'required',
+            'image_strings' => 'nullable',
             'title' => 'required|max:255',
             'caption' => 'required|max:3000'
         ]);
 
-        if (! $request->user()->tokenCan('user:admin')) {
+        if (!$request->user()->tokenCan('user:admin')) {
             throw ValidationException::withMessages([
                 'user_level' => 'you do not have permission to delete feed'
             ]);
@@ -184,24 +184,24 @@ class FeedController extends Controller
         $feed->title = $request->title;
         $feed->caption = $request->caption;
         $feed->save();
+        if ($request->image_strings) {
+            $n = 0;
+            //        foreach ($request->image_strings as $image_string) {
+            foreach ($feed->images as $images) {
+                Storage::delete($images->filename);
+                $image = base64_decode($request->image_strings);
 
-        $n = 0;
-//        foreach ($request->image_strings as $image_string) {
-        foreach ($feed->images as $images){
-            Storage::delete($images->filename);
-            $image = base64_decode($request->image_strings);
-
-            $n++;
-            $hashedName = str_replace('/', '', Hash::make($feed->value('updated_at') . $feed->value('title')));
-            $imageName = 'public/feed/' . (string)$request->feed_id . (string)$n . $hashedName . '.png';
-            Storage::put($imageName, $image);
+                $n++;
+                $hashedName = str_replace('/', '', Hash::make($feed->value('updated_at') . $feed->value('title')));
+                $imageName = 'public/feed/' . (string) $request->feed_id . (string) $n . $hashedName . '.png';
+                Storage::put($imageName, $image);
 
 
-            $images->filename = $imageName;
-            $images->save();
+                $images->filename = $imageName;
+                $images->save();
+            }
         }
-
-//        }
+        //        }
 
         return response()->json([
             'message' => 'feed has been updated'
@@ -218,27 +218,27 @@ class FeedController extends Controller
     {
         $request->validate([
             'feed_id' => 'required|integer',
-//            'colleger_id' => 'required|integer'
+            //            'colleger_id' => 'required|integer'
         ]);
 
         if ($request->user()->userable_type == 'App\Models\CollegerProfile') {
-            if (! DB::table('seen_by')->where([
+            if (!DB::table('seen_by')->where([
                 ['colleger_profile_id', $request->user()->userable_id],
                 ['feed_id', $request->feed_id]
             ])->exists()) {
                 Feed::find($request->feed_id)->collegerProfiles()->attach($request->user()->userable_id);
 
                 return response()->json([
-                   'message' => 'view recorded'
+                    'message' => 'view recorded'
                 ]);
             } else {
                 return response()->json([
-                   'message' => 'view has been recorded before'
+                    'message' => 'view has been recorded before'
                 ]);
             }
         } else {
             return response()->json([
-               'message' => 'you are an admin, bitch'
+                'message' => 'you are an admin, bitch'
             ]);
         }
     }
@@ -252,7 +252,7 @@ class FeedController extends Controller
     public function viewer(Request $request)
     {
         $request->validate([
-           'feed_id' => 'required|integer'
+            'feed_id' => 'required|integer'
         ]);
         $feed = Feed::find($request->feed_id);
 
