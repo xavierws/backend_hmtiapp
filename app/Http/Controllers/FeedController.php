@@ -271,10 +271,13 @@ class FeedController extends Controller
         $n = 0;
         $arrayOfName = array();
         foreach ($feed->collegerProfiles as $collegerProfile) {
-            $arrayOfName[$n] = $collegerProfile->name;
+            $arrayOfName[$n] = [
+                'name' => $collegerProfile->name,
+                'foto_profil' => asset($collegerProfile->image->filename)
+            ];
             $n++;
         }
 
-        return response(Feed::find($request->feed_id)->collegerProfiles()->get());
+        return $arrayOfName;
     }
 }
