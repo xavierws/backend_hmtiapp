@@ -105,7 +105,7 @@ class AuthController extends Controller
         $user->save();
 
         return response()->json([
-            'message' => ['Your password has been changed successfully']
+            'message' => 'Your password has been changed successfully'
         ]);
     }
 
