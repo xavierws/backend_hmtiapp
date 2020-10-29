@@ -257,7 +257,7 @@ class FeedController extends Controller
 
     /**
      * get all the feed's viewer
-     *asdasd asda sdas dasd
+     *asdasd asda sdaasd
      * @param Request $request
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
