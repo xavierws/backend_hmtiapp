@@ -33,17 +33,27 @@ class ParticipantController extends Controller
             //            'id' => 'required|integer',
             'name' => 'required',
             'birthday' => 'required',
-            'address' => 'required|max:255',
-            'password' => 'nullable',
-            'new_password' => 'nullable'
+            'address' => 'required|max:255'
         ]);
 
         $colleger = CollegerProfile::find($request->user()->userable_id);
         $colleger->name = $request->name;
         $colleger->birthday = $request->birthday;
         $colleger->address = $request->address;
-   
-        if ($request->password) {
+        $colleger->save();
+        return response()->json([
+            'message' => 'data updated'
+        ]);
+    }
+
+    public function updatepassword(Request $request)
+    {
+        $request->validate([
+            'password' => 'required',
+            'new_password' => 'required|min:6'
+        ]);
+
+
             $user = $request->user();
             //        $user = User::where('email', $request->email)->first();
 
@@ -55,8 +65,7 @@ class ParticipantController extends Controller
 
             $user->password = Hash::make($request->new_password);
             $user->save();
-        }
-        $colleger->save();
+ 
         return response()->json([
             'message' => 'data updated'
         ]);

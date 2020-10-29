@@ -71,7 +71,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('user/updatefoto', [ParticipantController::class, 'uploadPicture']);
     //update colleger data
     Route::put('user/update', [ParticipantController::class, 'update']);
-
+    Route::put('user/updatepasswords', [ParticipantController::class, 'updatepassword']);
     //create an event
     Route::post('event/post', [EventsController::class, 'create']);
 
