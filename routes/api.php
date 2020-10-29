@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 
 //login and issue token
 Route::post('login', [AuthController::class, 'login']);
-Route::get('notif/{name}/{description}', [AuthController::class, 'notif']);
+//Route::get('notif/{name}/{description}', [AuthController::class, 'notif']);
 
 //Send key to the user's email
 Route::post('forgot-password', [AuthController::class, 'forgotPassword']);
@@ -41,9 +41,20 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         $user = $request->user();
         $role = $user->userable->role_id == 1? 'colleger':'admin';
+
+        if ($role === 'colleger') {
+            $image = \App\Models\CollegerProfile::find($user->userable_id)->image();
+
+            $filename = '';
+            if ($image->exists()) {
+                $filename = $image->value('filename');
+            }
+        }
+
         return response()->json([
             'user' => $user,
-            'role' => $role
+            'role' => $role,
+            'image' => $filename
         ]);
     });
 

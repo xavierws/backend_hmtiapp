@@ -54,18 +54,18 @@ class ParticipantController extends Controller
         ]);
 
 
-            $user = $request->user();
-            //        $user = User::where('email', $request->email)->first();
+        $user = $request->user();
+        //        $user = User::where('email', $request->email)->first();
 
-            if (!Hash::check($request->password, $user->password)) {
-                throw ValidationException::withMessages([
-                    'email' => ['Password are incorrect.']
-                ]);
-            }
+        if (!Hash::check($request->password, $user->password)) {
+            throw ValidationException::withMessages([
+                'email' => ['Password are incorrect.']
+            ]);
+        }
 
-            $user->password = Hash::make($request->new_password);
-            $user->save();
- 
+        $user->password = Hash::make($request->new_password);
+        $user->save();
+
         return response()->json([
             'message' => 'data updated'
         ]);
@@ -82,7 +82,7 @@ class ParticipantController extends Controller
 
         $image = base64_decode($image_string);
 
-        $imageName = 'public/colleger/' . (string) $collegerId . '.png';
+        $imageName = 'public/colleger/' . (string)$collegerId . '.png';
         Storage::put($imageName, $image);
 
         if (!Image::where([
