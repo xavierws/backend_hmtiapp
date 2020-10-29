@@ -158,7 +158,7 @@ class EventsController extends Controller
         //        $event->enddate = $request->enddate;
         //        $event->save();
 
-        PushNotification::handle('new event', $request->name);
+        PushNotification::handle('New Event', $request->name);
 
         return response()->json([
             'message' => 'post events is successful'
@@ -191,7 +191,7 @@ class EventsController extends Controller
     {
         $request->validate([
             'event_id' => 'required|integer',
-            'calendar_id' => 'required|integer',
+            'calendar_date' => 'required',
             'name' => 'required|max:255',
             'category' => 'required|max:255',
             'description' => 'required|max:255',
@@ -213,8 +213,8 @@ class EventsController extends Controller
         }
 
         $event = Event::find($request->event_id);
-
-        $event->calendar_id = $request->calendar_id;
+        $calendar2 = Calendar::where('date', $request->calendar_date)->first();
+        $event->calendar_id = $calendar2->id;
         $event->name = $request->name;
         $event->category = $request->category;
         $event->description =  $request->description;
