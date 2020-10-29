@@ -47,7 +47,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
             
             if ($image->exists()) {
-                $filename = $image->value('filename');
+                $filename = asset($image->value('filename'));
             }
         }
 
