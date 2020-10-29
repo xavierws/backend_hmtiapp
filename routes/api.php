@@ -41,11 +41,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         $user = $request->user();
         $role = $user->userable->role_id == 1? 'colleger':'admin';
-
+        $filename = '';
         if ($role === 'colleger') {
             $image = \App\Models\CollegerProfile::find($user->userable_id)->image();
 
-            $filename = '';
+            
             if ($image->exists()) {
                 $filename = $image->value('filename');
             }
