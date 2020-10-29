@@ -250,16 +250,16 @@ class FeedController extends Controller
             }
         } else {
             return response()->json([
-                'message' => 'you are an admin, bitch'
+                'message' => 'you are an admin'
             ]);
         }
     }
 
     /**
      * get all the feed's viewer
-     *asdasd asda sdaasd
+     *
      * @param Request $request
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @return array
      */
     public function viewer(Request $request)
     {
@@ -271,9 +271,15 @@ class FeedController extends Controller
         $n = 0;
         $arrayOfName = array();
         foreach ($feed->collegerProfiles as $collegerProfile) {
+
+            $photo = '';
+            if ($collegerProfile->image()->exists()) {
+                $photo = asset($collegerProfile->image->filename);
+            }
+
             $arrayOfName[$n] = [
                 'name' => $collegerProfile->name,
-                'foto_profil' => asset($collegerProfile->image->filename)
+                'foto_profil' => $photo
             ];
             $n++;
         }
