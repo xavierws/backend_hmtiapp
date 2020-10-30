@@ -19,7 +19,7 @@ class PushNotification
         $dataString = json_encode($data);
 
         $headers = [
-            'Authorization: key=AAAA7DnAwoc:APA91bEiqEGplmavyMQZzT4iqmU-RDpmGyE6CLYr31aBWsiLGRZymQlZhyqbeNyPfJyt-Uqxi0TXgrm-TPCkDYMFMvcMArpw-2s5pwet0IrbP_4ayyJdk5JYjJg24SFXsIf6BQro0r66',
+            'Authorization: key=' . env('FCM_AUTH_KEY'),
             'Content-Type: application/json',
         ];
 
