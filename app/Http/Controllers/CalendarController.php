@@ -26,7 +26,7 @@ class CalendarController extends Controller
         $calendar = Calendar::whereMonth('date', $request->month)->whereYear('date', $request->year)->get();
         $data = [];
         foreach($calendar as $calendar2){
-            $data[$calendar2->date] =  Event::where('calendar_id',$calendar2->id)->get();
+            $data[$calendar2->date] =  Event::where('calendar_id',$calendar2->id)->orderBy('start_date')->get();
         }
 
         //return CalendarResource::collection($calendar);
