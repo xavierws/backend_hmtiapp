@@ -27,7 +27,7 @@
                     <h2>RESET PASSWORD</h2>
                     <p>ini adalah kode verifikasi untuk reset password</p>
 
-                    <h6>{{ $key }}</h6>
+                    <h4>{{ $key }}</h4>
                 </div>
             </div>
         </div>

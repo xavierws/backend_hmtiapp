@@ -45,7 +45,7 @@ Route::middleware('auth:sanctum')->group(function () {
         if ($role === 'colleger') {
             $image = \App\Models\CollegerProfile::find($user->userable_id)->image();
 
-            
+
             if ($image->exists()) {
                 $filename = asset($image->value('filename'));
             }

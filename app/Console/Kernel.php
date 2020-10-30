@@ -2,6 +2,8 @@
 
 namespace App\Console;
 
+use App\Actions\PushNotification;
+use App\Models\Event;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -24,7 +26,22 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+//         $schedule->command('inspire')->hourly();
+
+        $schedule->call(function () {
+            $events = Event::all();
+
+            foreach ($events as $event) {
+                $startDate = \Carbon\Carbon::parse($event->start_date);
+                $currentTime = \Carbon\Carbon::parse(now());
+
+                $diff = $startDate->diffInDays($currentTime);
+
+                if ($diff == 1) {
+                    PushNotification::handle('Reminder', $event->name);
+                }
+            }
+        })->daily()->at('13:00');
     }
 
     /**
