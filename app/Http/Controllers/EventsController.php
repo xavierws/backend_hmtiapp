@@ -36,10 +36,16 @@ class EventsController extends Controller
             if ($calendar->events()->exists()) {
                 $events = $calendar->events;
 
+                $eventArr = array();
+                foreach ($events as $event) {
+                    if (! $event->status == 'stopped') {
+                        $eventArr[] = $event;
+                    }
+                }
                 $arr[] = [
                     'calendar_id' => $calendar->id,
                     'day' => $calendar->date,
-                    'contain' => $events
+                    'contain' => $eventArr
                 ];
             }
         }
@@ -145,7 +151,8 @@ class EventsController extends Controller
             'description' => $request->description,
             'background_color' => $request->background_color,
             'start_date' => $request->start_date,
-            'end_date' => $request->end_date
+            'end_date' => $request->end_date,
+            'status' => 'running_new'
         ]);
 
         //        $event = new Event;
@@ -221,6 +228,7 @@ class EventsController extends Controller
         $event->background_color = $request->background_color;
         $event->start_date =  $request->start_date;
         $event->end_date = $request->end_date;
+        $event->status = 'running_updated';
         $event->save();
 
         return response()->json([
@@ -253,7 +261,8 @@ class EventsController extends Controller
             ]);
         }
 
-        Event::find($request->event_id)->delete();
+        $event = Event::find($request->event_id);
+        $event->status = 'stopped';
 
         return response()->json([
             'message' => 'event is deleted'

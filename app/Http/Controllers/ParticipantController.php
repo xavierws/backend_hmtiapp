@@ -81,20 +81,44 @@ class ParticipantController extends Controller
         $image_string = $request->image_string;
 
         $image = base64_decode($image_string);
+        $uniqueName = str_replace('/', '', Hash::make(mt_rand(100000, 999999)));
+        $imageName = 'public/colleger/' . (string)$collegerId . $uniqueName . '.png';
 
-        $imageName = 'public/colleger/' . (string)$collegerId . '.png';
+        $oldImg = CollegerProfile::find($collegerId)->image;
+
+        if ($oldImg->exists()) {
+            $oldName = $oldImg->value('filename');
+            Storage::delete($oldName);
+
+            $oldImg->filename = $imageName;
+            $oldImg->save();
+        }
+
+        Image::create([
+            'filename' => $imageName,
+            'imageable_id' => $collegerId,
+            'imageable_type' => 'App\Models\CollegerProfile'
+        ]);
+
         Storage::put($imageName, $image);
 
-        if (!Image::where([
-            ['imageable_type', 'App\Models\CollegerProfile'],
-            ['imageable_id', $collegerId]
-        ])->exists()) {
-            Image::create([
-                'filename' => $imageName,
-                'imageable_id' => $collegerId,
-                'imageable_type' => 'App\Models\CollegerProfile'
-            ]);
-        }
+//        Image::updateOrCreate([
+//            'filename' => $imageName,
+//            'imageable_id' => $collegerId,
+//            'imageable_type' => 'App\Models\CollegerProfile'
+//        ]);
+
+//        if (!Image::where([
+//            ['imageable_type', 'App\Models\CollegerProfile'],
+//            ['imageable_id', $collegerId]
+//        ])->exists()) {
+//            Image::create([
+//                'filename' => $imageName,
+//                'imageable_id' => $collegerId,
+//                'imageable_type' => 'App\Models\CollegerProfile'
+//            ]);
+//        }
+
         return response()->json([
             'message' => 'data updated'
         ]);

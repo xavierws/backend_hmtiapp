@@ -22,6 +22,7 @@ class CreateEventsTable extends Migration
             $table->string('background_color');
             $table->timestamp('start_date')->nullable();
             $table->timestamp('end_date')->nullable();
+            $table->string('status');
             $table->timestamps();
 
             $table->foreign('calendar_id')->references('id')->on('calendars');

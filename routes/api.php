@@ -99,7 +99,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('event/update', [EventsController::class, 'update']);
 
     //delete event
-    Route::delete('event/delete', [EventsController::class, 'destroy']);
+    Route::put('event/delete', [EventsController::class, 'destroy']);
 
     //get all dates from calendar
     Route::get('calendar/index', [CalendarController::class, 'index']);
