@@ -28,7 +28,8 @@ class Event extends Model
         'description',
         'background_color',
         'start_date',
-        'end_date'
+        'end_date',
+        'status'
     ];
 
     /**

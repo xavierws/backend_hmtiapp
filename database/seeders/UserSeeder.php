@@ -38,6 +38,29 @@ class UserSeeder extends Seeder
 
         $this->generateColleger();
         $this->generateAdmin();
+
+        DB::table('colleger_profiles')->insert([
+            'name' => 'test_name',
+            'nrp'=> '05211840000001',
+            'birthday' => '1970-01-01',
+            'address' => 'test_address',
+            'role_id' => 1,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        $colleger = CollegerProfile::orderBy('id', 'desc')->first();
+
+        DB::table('users')->insert([
+            'email' => 'rakaabadisusilo@gmail.com',
+            'email_verified_at' => now(),
+            'password' => Hash::make('password'),
+            'remember_token' => Str::random(10),
+            'userable_id' => $colleger->id,
+            'userable_type' => 'App\Models\CollegerProfile',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
     }
 
     private function generateColleger() {

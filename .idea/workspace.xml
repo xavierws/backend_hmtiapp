@@ -18,7 +18,9 @@
   <component name="ChangeListManager">
     <list default="true" id="46ca1f6c-3fa9-401b-b00c-bd5d2e7d575b" name="Default Changelist" comment="adding dataset">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ParticipantController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ParticipantController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/EventsController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/EventsController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Event.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Event.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/seeders/UserSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/UserSeeder.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -233,6 +235,11 @@
       <workItem from="1603948941531" duration="5342000" />
       <workItem from="1603980099999" duration="20104000" />
       <workItem from="1604022650924" duration="12342000" />
+      <workItem from="1604330122134" duration="3849000" />
+      <workItem from="1604413405373" duration="3420000" />
+      <workItem from="1604427695277" duration="648000" />
+      <workItem from="1605112436890" duration="386000" />
+      <workItem from="1605113234999" duration="60000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <created>1602537736276</created>
@@ -500,7 +507,14 @@
       <option name="project" value="LOCAL" />
       <updated>1604032052089</updated>
     </task>
-    <option name="localTasksCounter" value="39" />
+    <task id="LOCAL-00039" summary="add status in event table, make change status">
+      <created>1604330758471</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1604330758471</updated>
+    </task>
+    <option name="localTasksCounter" value="40" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -535,7 +549,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/hmtiapp" />
     </ignored-roots>
-    <MESSAGE value="fixing bug in AuthController.php and FeedController.php" />
     <MESSAGE value="fixing feed index, change bytestring to url" />
     <MESSAGE value="update ParticipantController.php and AuthController.php" />
     <MESSAGE value="create inputViewer and viewer in FeedController.php" />
@@ -560,7 +573,8 @@
     <MESSAGE value="add if condition on FeedController.php" />
     <MESSAGE value="create account for user, add task scheduling for notification" />
     <MESSAGE value="fixing .env" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixing .env" />
+    <MESSAGE value="add status in event table, make change status" />
+    <option name="LAST_COMMIT_MESSAGE" value="add status in event table, make change status" />
   </component>
   <component name="WindowStateProjectService">
     <state x="520" y="222" key="#Images" timestamp="1602405474002">
@@ -583,10 +597,10 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="499" y="167" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1536.824@0.0.1536.824" timestamp="1604017644525" />
-    <state x="93" y="93" width="1350" height="638" key="DiffContextDialog" timestamp="1603992514128">
+    <state x="93" y="93" width="1350" height="639" key="DiffContextDialog" timestamp="1604331570778">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="93" y="93" width="1350" height="638" key="DiffContextDialog/0.0.1536.824@0.0.1536.824" timestamp="1603992514128" />
+    <state x="93" y="93" width="1350" height="639" key="DiffContextDialog/0.0.1536.824@0.0.1536.824" timestamp="1604331570778" />
     <state x="548" y="153" key="FileChooserDialogImpl" timestamp="1602557286298">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -615,10 +629,10 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="277" y="57" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1603825510517" />
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1604032062291">
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1604330760337">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1604032062291" />
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1604330760337" />
     <state x="586" y="326" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1604046264951">
       <screen x="0" y="0" width="1536" height="824" />
     </state>

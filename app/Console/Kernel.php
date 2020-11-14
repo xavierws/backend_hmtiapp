@@ -29,19 +29,30 @@ class Kernel extends ConsoleKernel
 //         $schedule->command('inspire')->hourly();
 
         $schedule->call(function () {
-            $events = Event::all();
+            $sekarang = date("Y-m-d H:i:s");
+            $besok = date("Y-m-d H:i:s",strtotime($sekarang."+ 2 days"));
+            $events = Event::where('kategori','!=','canceled')->where('start_date','>=',$sekarang)->where('start_date','<=',$besok)->orderBy('start_date')->get();
 
             foreach ($events as $event) {
-                $startDate = \Carbon\Carbon::parse($event->start_date);
-                $currentTime = \Carbon\Carbon::parse(now());
-
-                $diff = $startDate->diffInDays($currentTime);
-
-                if ($diff == 1) {
-                    PushNotification::handle('Reminder', $event->name);
-                }
+                /*
+                  $startDate = \Carbon\Carbon::parse($event->start_date);
+                  $currentTime = \Carbon\Carbon::parse(now());
+                  $diff = $startDate->diffInDays($currentTime);
+                  if ($diff == 1) {
+                      PushNotification::handle('Reminder', $event->name);
+                  }
+                  */
+                PushNotification::handle('Reminder', $event->name);
+                /*
+                $startDate = date_create("2013-03-15");
+                $currentTime = date_create("2013-03-16");
+                $diff = date_diff($startDate,$currentTime);
+                if ($diff->format("%R%a") == "+1") {
+                  PushNotification::handle('Reminder', "asdasdas");
+                 }
+                 */
             }
-        })->daily()->at('13:00');
+        })->everyMinute();
     }
 
     /**

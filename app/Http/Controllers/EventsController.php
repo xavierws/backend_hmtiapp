@@ -27,28 +27,38 @@ class EventsController extends Controller
             'offset' => 'required|integer'
         ]);
 
-        $calendars = Calendar::offset($request->offset)->limit($request->limit)->get();
-        //        $events = Event::all();
-        //        $events->groupBy('calendar_id')->toArray();
+//        $calendars = Calendar::offset($request->offset)->limit($request->limit)->get();
+        $events = Event::orderBy('updated_at', 'desc')
+            ->offset($request->offset)
+            ->limit($request->limit)
+            ->get();
+//        $events->offset($request->offset)->limit($request->limit)->get();
 
         $arr = array();
-        foreach ($calendars as $calendar) {
-            if ($calendar->events()->exists()) {
-                $events = $calendar->events;
-
-                $eventArr = array();
-                foreach ($events as $event) {
-                    if (! $event->status == 'stopped') {
-                        $eventArr[] = $event;
-                    }
-                }
-                $arr[] = [
-                    'calendar_id' => $calendar->id,
-                    'day' => $calendar->date,
-                    'contain' => $eventArr
-                ];
-            }
+        foreach ($events as $event) {
+            $arr[] = [
+              'updated_at' => $event->updated_at,
+              'contains' =>   Event::where('updated_at', $event->updated_at)->get()
+            ];
         }
+
+//        foreach ($calendars as $calendar) {
+//            if ($calendar->events()->exists()) {
+//                $events = $calendar->events;
+//
+//                $eventArr = array();
+//                foreach ($events as $event) {
+//                    if (! $event->status == 'stopped') {
+//                        $eventArr[] = $event;
+//                    }
+//                }
+//                $arr[] = [
+//                    'calendar_id' => $calendar->id,
+//                    'day' => $calendar->date,
+//                    'contain' => $eventArr
+//                ];
+//            }
+//        }
 
         return response($arr);
 
@@ -263,6 +273,7 @@ class EventsController extends Controller
 
         $event = Event::find($request->event_id);
         $event->status = 'stopped';
+        $event->save();
 
         return response()->json([
             'message' => 'event is deleted'
